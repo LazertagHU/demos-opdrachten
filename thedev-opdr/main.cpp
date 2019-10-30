@@ -105,12 +105,14 @@ private:
     // eigenlijk een struct
     long long int msg_duration;
     hwlib::terminal_from & display;
+    hwlib::pin_out & led;
     rtos::timer timer;
     rtos::channel < int, 1028> messages;
 
     void main(){
         for(;;){
             display << '\f' << hwlib::flush;
+            led.write(0); led.flush();
             while(true){
                 auto m = messages.read();
                 show(m);
@@ -130,6 +132,7 @@ private:
             else if(i == 17){display << '\n';}
             else if(i == 9){ display << '\n';}
         }
+        led.write(1); led.flush();
         display << hwlib::flush;
     }
 
@@ -138,11 +141,13 @@ public:
     msg_logger(
         const char* name,
         long long int msg_duration,
-        hwlib::terminal_from & display
+        hwlib::terminal_from & display,
+        hwlib::pin_out& led
     ):
         task( name ),
         msg_duration(msg_duration),
         display(display),
+        led(led),
         timer( this, "timer"),
         messages( this, "messages")
     {}
@@ -167,6 +172,8 @@ int main(){
     auto font    = hwlib::font_default_8x8();
     auto display = hwlib::terminal_from( oled, font );
     
+
+    auto led = target::pin_out(target::pins::d7);
     auto ir_sensor = target::pin_in( target::pins::d8 );   
     auto tsop_gnd    = target::pin_out( target::pins::d9 );
     auto tsop_vdd    = target::pin_out( target::pins::d10 );
@@ -176,7 +183,7 @@ int main(){
     tsop_vdd.flush();
 
 
-    auto msg_log            = msg_logger("msg_logger", 5'000'000, display);
+    auto msg_log            = msg_logger("msg_logger", 5'000'000, display, led);
     auto msg_decodation     = msg_decoder( "msg_decoder", msg_log);
     auto pause_detection    = pause_detector("pause_detector", ir_sensor, 100LL, msg_decodation);
    
