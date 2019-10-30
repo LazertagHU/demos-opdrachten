@@ -11,15 +11,27 @@ private:
     hwlib::pin_in & irsensor;
     pause_listener & listener;
     rtos::clock interval_clock;
+    hwlib::target::pin_out debugPin = hwlib::target::pin_out( hwlib::target::pins::d7 );
 
     void main(){
         int n = 0;
         for(;;){
             wait( interval_clock );
-            if(irsensor.read()){ n+=100;  }
+            if(!irsensor.read()){ n+=100;  }
             else { 
+                if (n > 1200)
+                {
+                    debugPin.write(1);
+                    debugPin.flush();
+                }
+                else
+                {
+                    debugPin.write(0);
+                    debugPin.flush();
+                }
+                
                 listener.pause_detected( n ); 
-                while( !irsensor.read() ){
+                while( irsensor.read() ){
                     wait( interval_clock );
                 }
                 n = 0;
@@ -55,33 +67,39 @@ private:
         uint32_t n = 0; 
         uint32_t msg = 0;
         for(;;){
-            reset_timer.set(4000);
+            reset_timer.set(6000);
             auto p = wait(pauses + reset_timer);
             if (p == reset_timer)
             {
                 n = 0; msg = 0;
+                // hwlib::cout << "reset_timer\n";
                 continue;
             }
             else{
                 int read = pauses.read();
-                n++;
-                if (n >= 32)
+            
+               if (n >= 32)
                 {
-                    if ((msg>>16)^msg)
+                    if ((uint16_t)(msg>>16)^((uint16_t)msg))
                     {
+                        hwlib::cout << msg << "  " <<((uint16_t)(msg>>16)^((uint16_t)msg)) << "bad message 0\n";
                         n = 0; msg = 0;
                         continue;
                     }
                     if (((msg%32) ^ ((msg>>5)%32)) != ((msg >> 10)%32))
                     {
+                        hwlib::cout << msg << "\n";
+                        hwlib::cout << ((msg >> 2)%32) << " " << ((msg >> 7)%32) << " " << ((msg >> 12)%32) << "bad message 1\n";
                         n = 0; msg = 0;
                         continue;
                     }
                     if (!(msg >> 31))
                     {
+                        hwlib::cout << "bad message 2\n";
                         n = 0; msg = 0;
                         continue;
                     }
+                    hwlib::cout << " huh";
                     listener.sendMessage(msg);
                 }
                 else
@@ -92,6 +110,7 @@ private:
                     else{
                         msg <<= 1;
                     }
+                    n++;
                 }
             }
         }
