@@ -18,11 +18,11 @@ struct typeMessage{
 class Display{
 public: 
    
-   template< typename T>
+    template< typename T>
     void show(typeMessage<T> msg){};
 };
 
-class Player{public: int getSome(); void setSome(int x);};
+class Player{public: void setID(int id); int getSome(); void setSome(int x); int getLives(); void setLives(int x); int getWeaponCooldown();};
 class Transmitter{public: void send(int command);};
 
 enum class buttonid
@@ -60,7 +60,7 @@ private:
     rtos::clock                 secondClock;
     rtos::timer                 delayTimer;
 
-    void main()
+    void main() override
     {
         
         state_t                 currentState        = state_t::IDLE;
@@ -69,200 +69,343 @@ private:
         uint32_t                command;    
         uint32_t                startCommand;
         uint32_t                msg;
+        uint32_t                shootCommand        = 15; // dit moet veranderd worden
         bool                    playerWeaponEntered = false;
         bool                    playerIDEntered     = false;
         bool                    gameLeader          = false;
         bool                    gameTimeEntered     = false;
+        bool                    transferHitsAllowed = false;
         int                     countdown           = 0;
         int                     remainingGameTime   = 0;
         int                     delay               = 0;  
 
-
-        switch (currentState)
+        for(;;)
         {
-        case state_t::IDLE:
-            auto x = typeMessage{"iets", 'M'};
-            display.show(typeMessage{"Game Setup", 'M'});
-            auto evt = wait(inputChannel + messageFlag);
-            if(evt == inputChannel)
+            switch (currentState)
             {
-                bnID == inputChannel.read();
-                if(bnID == buttonid::cButton && playerWeaponEntered == true && gameLeader == true)
+            case state_t::IDLE:
+                auto x = typeMessage{"iets", 'M'};
+                display.show(typeMessage{"Game Setup", 'M'}) ;
+                auto evt = wait(inputChannel + messageFlag);
+                if(evt == inputChannel)
                 {
-                    display.show(typeMessage{"Enter Game Time", 'M'});
-                    command = 0;
-                    currentState = state_t::ENTER_TIME_REMAINING;
-                }
-                else if(bnID == buttonid::bButton)
-                {
-                    display.show(typeMessage{"Choose weapon", 'M'});
-                    currentState = state_t::WAIT_FOR_WEAPON_NUMBER;
-                }else if(bnID == buttonid::aButton)
-                {
-                    display.show(typeMessage{"Enter a player ID", 'M'});
-                    currentState = state_t::WAIT_FOR_PLAYER_NUMBER;
-                }
-                else{
-                    // weet niet of deze geprogrammeerd moet worden???
-                }
-            }
-            else
-            {
-                msg = messagepool.read();
-                if(msg == 10) // gametime
-                {
-                    remainingGameTime   = computeGameTime(msg); //----------
-                    gameTimeEntered     = true;
-                }
-                else if (msg == 10 /*startgame*/ && gameTimeEntered == true && playerIDEntered == true && playerWeaponEntered == true)
-                {
-                    display.show(typeMessage{"Starting game in", 'M'});
-                    countdown       = 10 + computeCountdown(msg);
-                    currentState    = state_t::AFTELLEN;
-
-                }
-            }
-            break;
-
-        case state_t::WAIT_FOR_PLAYER_NUMBER:
-            int input = waitForInput();
-            if(input > 0 && input <= 15)
-            {
-                auto temp = playerpool.read();
-                temp.setSome(input);
-                playerpool.write(temp);
-                playerIDEntered == true;
-            }
-            else
-            {
-                display.show(typeMessage{"invalid player id", 'M'});
-            }
-            currentState = state_t::IDLE;
-            break;
-
-        case state_t::WAIT_FOR_WEAPON_NUMBER:
-            int input = waitForInput();
-            if(input > 0 && input <= 15)
-            {
-                auto temp = playerpool.read();
-                temp.setSome(input);
-                playerpool.write(temp);
-                playerWeaponEntered == true;
-            }
-            else
-            {
-                display.show(typeMessage{"invalid weapon id", 'M'});
-            }
-            currentState = state_t::IDLE;
-            break;
-
-        case state_t::ENTER_TIME_REMAINING:
-            command = 0;
-            int input = waitForInput();
-            if(input > 0 && input <= 15){
-                command = calculateCheckSum(input);
-                currentState = state_t::SEND_COMMAND_STATE;
-            }
-            break;
-
-        case state_t::SEND_COMMAND_STATE:
-            bnID = inputChannel.read();
-            if(bnID == buttonid::hastagButton){
-                transmitter.send(command);
-            }else if( bnID == buttonid::starButton){
-                countdown = 30;
-                display.show(typeMessage{"press * to send start command", 'M'});
-                startCommand = computeStartCommand(countdown);
-                currentState = state_t::START_GAME_TRANSMISSION_STATE;
-            }else{
-                    // donno of deze moet
-            }
-            break;
-
-        case state_t::START_GAME_TRANSMISSION_STATE:
-            auto evt = wait(secondClock + inputChannel);
-                if(evt == inputChannel){
-                    bnID = inputChannel.read();
-                    if(bnID == buttonid::starButton){
-                        transmitter.send(startCommand);
+                    bnID == inputChannel.read();
+                    if(bnID == buttonid::cButton && playerWeaponEntered == true && gameLeader == true)
+                    {
+                        display.show(typeMessage{"Enter Game Time", 'M'});
+                        command = 0;
+                        currentState = state_t::ENTER_TIME_REMAINING;
                     }
-                }else if(evt == secondClock){
-                    if(countdown > 1){
-                        countdown--;
-                        startCommand = computeStartCommand(countdown);
-                        display.show(typeMessage{countdown, 'T'});
-                    }else{
-                        display.show(typeMessage{"Starting game", 'M'});
-                        countdown = 10;
-                        display.show(typeMessage{countdown, 'T'});
+                    else if(bnID == buttonid::bButton)
+                    {
+                        display.show(typeMessage{"Choose weapon", 'M'});
+                        currentState = state_t::WAIT_FOR_WEAPON_NUMBER;
+                    }else if(bnID == buttonid::aButton)
+                    {
+                        display.show(typeMessage{"Enter a player ID", 'M'});
+                        currentState = state_t::WAIT_FOR_PLAYER_NUMBER;
+                    }
+                    else{
+                        // weet niet of deze geprogrammeerd moet worden???
                     }
                 }
-            
-            break;
-
-        case state_t::AFTELLEN:
-            wait(secondClock);
-            if(countdown > 1){
-                display.show(typeMessage{--countdown, 'T'});
-            }else{
-                auto tmp = playerpool.read();
-                tmp.setSome(100); // set lives
-                playerpool.write(tmp);
-                display.show(typeMessage{"Alive", 'M'});
-                currentState = state_t::RUNGAME;
-            }
-
-        case state_t::RUNGAME:
-            switch (currentSubState)
-            {
-            case substates_runGame_t::ALIVE:
-                auto evt = wait(messageFlag + secondClock + inputChannel);
-                if(evt == messageFlag){
+                else
+                {
                     msg = messagepool.read();
-                    if(isHitMessage(msg)){
-                        auto tmp = playerpool.read();
-                        tmp.setSome(tmp.getSome() - computeHit(msg));   // set lives
-                        playerpool.write(tmp);
-                        delay = computeDelay(msg);
-                        delayTimer.set(delay);   /// check return type of computedelay
-                        display.show(typeMessage{"hit by", 'M'}); // nog dit uitvogelen
-                        currentSubState = substates_runGame_t::HIT;
+                    if(msg == 10) // gametime
+                    {
+                        remainingGameTime   = computeGameTime(msg); //----------
+                        gameTimeEntered     = true;
                     }
-                    if(playerpool.read().getSome() < 0){
-                        currentState = state_t::GAME_OVER;
+                    else if (msg == 10 /*startgame*/ && gameTimeEntered == true && playerIDEntered == true && playerWeaponEntered == true)
+                    {
+                        display.show(typeMessage{"Starting game in", 'M'});
+                        countdown       = 10 + computeCountdown(msg);
+                        currentState    = state_t::AFTELLEN;
+
                     }
-                }else if(evt == secondClock){
-                    if( remainingGameTime > 0 ){
-                        remainingGameTime--;
-                        display.show(typeMessage{remainingGameTime, 'T'});
-                    }else{
-                        currentState = state_t::GAME_OVER;
-                    }
-                }else{
-                    bnID = inputChannel.read();
                 }
                 break;
-            
-            case substates_runGame_t::WEAPON_COOLDOWN:
+
+            case state_t::WAIT_FOR_PLAYER_NUMBER:
+                int input = waitForInput();
+                if(input > 0 && input <= 15)
+                {
+                    auto temp = playerpool.read();
+                    temp.setSome(input);
+                    playerpool.write(temp);
+                    playerIDEntered == true;
+                }
+                else
+                {
+                    display.show(typeMessage{"invalid player id", 'M'});
+                }
+                currentState = state_t::IDLE;
                 break;
 
-            case substates_runGame_t::HIT:
+            case state_t::WAIT_FOR_WEAPON_NUMBER:
+                int input = waitForInput();
+                if(input > 0 && input <= 15)
+                {
+                    auto temp = playerpool.read();
+                    temp.setSome(input);
+                    playerpool.write(temp);
+                    playerWeaponEntered == true;
+                }
+                else
+                {
+                    display.show(typeMessage{"invalid weapon id", 'M'});
+                }
+                currentState = state_t::IDLE;
                 break;
 
+            case state_t::ENTER_TIME_REMAINING:
+                command = 0;
+                int input = waitForInput();
+                if(input > 0 && input <= 15){
+                    command = calculateCheckSum(input);
+                    currentState = state_t::SEND_COMMAND_STATE;
+                }
+                break;
+
+            case state_t::SEND_COMMAND_STATE:
+                bnID = inputChannel.read();
+                if(bnID == buttonid::hastagButton){
+                    transmitter.send(command);
+                }else if( bnID == buttonid::starButton){
+                    countdown = 30;
+                    display.show(typeMessage{"press * to send start command", 'M'});
+                    startCommand = computeStartCommand(countdown);
+                    currentState = state_t::START_GAME_TRANSMISSION_STATE;
+                }else{
+                        // donno of deze moet
+                }
+                break;
+
+            case state_t::START_GAME_TRANSMISSION_STATE:
+                auto evt = wait(secondClock + inputChannel);
+                    if(evt == inputChannel){
+                        bnID = inputChannel.read();
+                        if(bnID == buttonid::starButton){
+                            transmitter.send(startCommand);
+                        }
+                    }else if(evt == secondClock){
+                        if(countdown > 1){
+                            countdown--;
+                            startCommand = computeStartCommand(countdown);
+                            display.show(typeMessage{countdown, 'T'});
+                        }else{
+                            display.show(typeMessage{"Starting game", 'M'});
+                            countdown = 10;
+                            display.show(typeMessage{countdown, 'T'});
+                        }
+                    }
+                
+                break;
+
+            case state_t::AFTELLEN:
+                wait(secondClock);
+                if(countdown > 1){
+                    display.show(typeMessage{--countdown, 'T'});
+                }else{
+                    auto tmp = playerpool.read();
+                    tmp.setLives(100); // set lives
+                    playerpool.write(tmp);
+                    display.show(typeMessage{"Alive", 'M'});
+                    currentState = state_t::RUNGAME;
+                }
+
+            case state_t::RUNGAME:
+                switch (currentSubState)
+                {
+                case substates_runGame_t::ALIVE:
+                    auto evt = wait(messageFlag + secondClock + inputChannel);
+                    if(evt == messageFlag)
+                    {
+                        msg = messagepool.read();
+                        if(isHitMessage(msg))
+                        {
+                            auto tmp = playerpool.read();
+                            tmp.setLives(tmp.getLives() - computeHit(msg));   // set lives
+                            playerpool.write(tmp);
+                            delay = computeDelay(msg);
+                            delayTimer.set(delay);                                              /// check return type of computedelay
+                            display.show(typeMessage{"hit by", 'M'});                           // nog dit uitvogelen
+                            currentSubState = substates_runGame_t::HIT;
+
+                            if(playerpool.read().getLives() < 0)
+                            {
+                                currentState = state_t::GAME_OVER;
+                            }       
+                        }
+                        else
+                        {
+                        }
+                        
+                    }
+                    else if(evt == secondClock)
+                    {
+                        if( remainingGameTime > 0 )
+                        {
+                            remainingGameTime--;
+                            display.show(typeMessage{remainingGameTime, 'T'});
+                        }
+                        else
+                        {
+                            currentState = state_t::GAME_OVER;
+                        }
+                    }
+                    else
+                    {
+                        bnID = inputChannel.read();
+                        if(bnID == buttonid::eButton)
+                        {
+                            transmitter.send(shootCommand);
+                            delayTimer.set(playerpool.read().getWeaponCooldown());
+                            currentSubState = substates_runGame_t::WEAPON_COOLDOWN;
+                        }else{
+                            // weet niet of dit moet
+                        }
+                    }
+                    break;
+                
+                case substates_runGame_t::WEAPON_COOLDOWN:
+                    auto evt = wait(delayTimer + messageFlag + secondClock);
+                    if(evt == messageFlag)
+                    {
+                        msg = messagepool.read();
+                        if(isHitMessage(msg))
+                        {
+                            auto tmp = playerpool.read();
+                            tmp.setLives(tmp.getLives() - computeHit(msg));   // set lives
+                            playerpool.write(tmp);
+                            delay = computeDelay(msg);
+                            delayTimer.set(delay);                                              /// check return type of computedelay
+                            display.show(typeMessage{"hit by", 'M'});                           // nog dit uitvogelen
+                            currentSubState = substates_runGame_t::HIT;
+
+                            if(playerpool.read().getLives() < 0)
+                            {
+                                currentState = state_t::GAME_OVER;
+                            }       
+                        }
+                        else
+                        {
+                        }
+                        
+                    }
+                    else if(evt == secondClock)
+                    {
+                        if( remainingGameTime > 0 )
+                        {
+                            remainingGameTime--;
+                            display.show(typeMessage{remainingGameTime, 'T'});
+                        }
+                        else
+                        {
+                            currentState = state_t::GAME_OVER;
+                        }
+                    }
+                    else
+                    {
+                        currentSubState = substates_runGame_t::ALIVE;
+                    }
+                    break;
+
+                case substates_runGame_t::HIT:
+                    auto evt = wait(delayTimer + secondClock);
+                    if (evt == delayTimer)
+                    {
+                        display.show(typeMessage{"Alive", 'M'});
+                        currentSubState = substates_runGame_t::ALIVE;
+                    }
+                    else
+                    {
+                        if( remainingGameTime > 0 )
+                        {
+                            remainingGameTime--;
+                            display.show(typeMessage{remainingGameTime, 'T'});
+                        }
+                        else
+                        {
+                            currentState = state_t::GAME_OVER;
+                        }
+                    }
+                    
+                    break;
+
+                default:
+                    break;
+                }
+            case state_t::GAME_OVER:
+                display.show(typeMessage{"Game over", 'M'});
+                transferHitsAllowed = true;
+                break;
             default:
                 break;
             }
-
-        default:
-            break;
         }
+        
     }
 
 
     int computeGameTime(int msg){};
     int computeCountdown(int msg){};
     int computeStartCommand(int msg){};
-    int waitForInput(){};
+    int waitForInput()
+    {
+        char tens;
+        char ones;
+        bool loop = true;
+
+        enum class waitForInputStates{AWAIT_FIRST_CHARACTER, AWAIT_SECOND_CHARACTER, END};
+        waitForInputStates state = AWAIT_FIRST_CHARACTER;
+        
+        while (loop)
+        {
+            switch(state)
+            {
+                case AWAIT_FIRST_CHARACTER:
+                    bnID = inputChannel.read();
+                    if(bnID >= buttonid::zeroButton && bnID <= buttonid::nineButton)
+                    {
+                        tens = bnID;
+                        display.show(typeMessage{tens, 'N'});
+                        state = waitForInputStates::AWAIT_SECOND_CHARACTER;
+                    }
+                    else if(bnID == buttonid::starButton)
+                    {
+                        state = waitForInputStates::END;
+                    }
+                    break;
+                
+                case AWAIT_SECOND_CHARACTER:
+                    bnID = inputChannel.read();
+                    if(bnID >= buttonid::zeroButton && bnID <= buttonid::nineButton)
+                    {
+                        ones = bnID;
+                        display.show(typeMessage{(tens-'0')*10 + (ones - '0'), 'N'});
+                        state = waitForInputStates::AWAIT_SECOND_CHARACTER;
+                        auto player = playerpool.read();
+                        player.setID((tens-'0')*10 + (ones - '0'));
+                        playerpool.write(player);
+                    }
+                    else if(bnID == buttonid::starButton)
+                    {
+                        auto player = playerpool.read();
+                        player.setID(tens-'0');
+                        playerpool.write(player);
+                        state = waitForInputStates::END;
+                    }
+                    break;
+                case END:
+                    loop = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
     uint8_t calculateCheckSum(int & input){};
     bool isHitMessage(int message){};
     int computeHit(int message){};
