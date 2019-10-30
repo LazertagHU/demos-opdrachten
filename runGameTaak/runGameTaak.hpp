@@ -78,7 +78,8 @@ private:
         buttonid                bnID;
         uint32_t                command;    
         uint32_t                debugCommand        = 0b1'01111'00101'00000; // 0b1'01111'00101'01010
-        uint32_t                startCommand;
+        uint32_t                startCommand        = 0b1'00000'10000'00000'1'00000'10000'00000;
+        uint32_t                setTimeCommand      = 0b1'00000'0;
         uint32_t                msg;
         uint32_t                shootCommand        = 15; // dit moet veranderd worden
         bool                    playerWeaponEntered = false;
@@ -363,9 +364,27 @@ private:
     }
 
 
-    int computeGameTime(int msg){};
-    int computeCountdown(int msg){};
-    int computeStartCommand(int msg){};
+    int computeGameTime(int msg)
+    {
+        msg <<= 23;
+        msg >>= 28;
+        return msg;
+
+    };
+
+    int computeCountdown(int msg)
+    {
+        msg <<= 23;
+        msg >>= 28;
+        return msg*2;
+    };
+
+    int computeStartCommand(int msg)
+    {
+
+    };
+
+
     int waitForInput()
     {
         char tens;
