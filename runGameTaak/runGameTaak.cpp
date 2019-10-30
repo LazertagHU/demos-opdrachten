@@ -166,9 +166,10 @@ void RunGameTaak::main()
                     msg = messagepool.read();
                     if(isHitMessage(msg))
                     {
-                        auto tmp = playerpool.read();
-                        tmp.setLives(tmp.getLives() - computeHit(msg));   // set lives
-                        playerpool.write(tmp);
+                        auto player = playerpool.read();
+                        player.setLives(player.getLives() - computeHit(msg));   // set lives
+                        // tmp.addhit(msg) ---------
+                        playerpool.write(player);
                         delay = computeDelay(msg);
                         delayTimer.set(delay);                                              /// check return type of computedelay
                         display.show("hit by", 'M');                           // nog dit uitvogelen
