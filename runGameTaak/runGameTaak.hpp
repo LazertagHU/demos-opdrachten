@@ -8,13 +8,31 @@
 
 class Display{
 public: 
-   
-   
     void show(char* msg, char x){};
     void show(int msg, char x){};
 };
 
-class Player{public: void setID(int id); int getSome(); void setSome(int x); int getLives(); void setLives(int x); int getWeaponCooldown();};
+struct weapon{
+    const char* name;
+    int damage;
+    int deathdelay;
+};
+
+
+class Player{
+private:
+    std::array<weapon, 10> weapons{weapon{"pistol", 5, 2}, weapon{"sniper", 20, 5}, weapon{"rifle", 10, 4}};
+public: 
+    void setID(int id); 
+    int getSome(); 
+    void setSome(int x); 
+    int getLives(); 
+    void setLives(int x); 
+    int getWeaponCooldown(); 
+    int getPlayerID();
+    weapon getWeapon(int n){return weapons[n];}
+
+};
 class Transmitter{public: void send(int command);};
 
 enum class buttonid
@@ -59,6 +77,7 @@ private:
         substates_runGame_t     currentSubState     = substates_runGame_t::ALIVE;
         buttonid                bnID;
         uint32_t                command;    
+        uint32_t                debugCommand        = 0b1'01111'00101'00000; // 0b1'01111'00101'01010
         uint32_t                startCommand;
         uint32_t                msg;
         uint32_t                shootCommand        = 15; // dit moet veranderd worden
@@ -69,7 +88,11 @@ private:
         bool                    transferHitsAllowed = false;
         int                     countdown           = 0;
         int                     remainingGameTime   = 0;
-        int                     delay               = 0;  
+        int                     delay               = 0;
+
+
+        
+
 
         for(;;)
         {
@@ -397,12 +420,78 @@ private:
             }
         }
     };
-    uint8_t calculateCheckSum(int & input){};
-    bool isHitMessage(int message){
+   
+    uint32_t calculateCheckSum(uint32_t input)
+    {
+        /*
+        message layout:
+        2 * 16 bits message.
 
+        bit : 0           : 1 : 2 : 3 : 4 : 5 : 6 : 7 : 8 : 9 : 10 : 11: 12 : 13 : 14 : 15
+        val : startBit    : player ID         : weapon ID          : XOR bits
+
+        bit : 0           : 16 : 17 : 18 : 19 : 20 : 21 : 22 : 23 : 24 : 25 : 26: 27 : 28 : 29 : 30
+        val : startBit    : player ID              : weapon ID              : XOR bits
+
+        control bit 11 is the xor of bit 1 and 6;
+        control bit 12 is the xor of bit 2 and 7;
+        etc...
+        */
+        
+        for(int i = 21; i < 26; i++)
+        {
+            bool x = input & (1 << i);
+            bool y = input & (1 << (i+5));
+
+            input = input | ((x ^ y) << (i-5));
+            input = input | ((x ^ y) << (i-21));
+        }
+
+        return input;
     };
-    int computeHit(int message){};
-    int computeDelay(int message){};
+
+    bool isHitMessage(uint32_t message)
+    {
+        /* 
+        This funciton calculates wether the player has been shot by an enemy.
+        If the player shoots himself, the function will return false;
+        */
+        auto id = playerpool.read().getPlayerID();
+        message <<=17;
+        message >>=27;
+        if(((message) & id) != id ){        // if player id from message does not equal own plater id, it means that the player is shot.
+            return true;
+        }
+        return false;
+    };
+
+
+    int computeHit(uint32_t message)
+    {
+        /* 
+        this function calculates the hit damage. 
+        it calculates the weapon id the player has been hit by and
+        returns the specific damage that is attached to that weapon.
+        */
+        message <<=22;
+        message >> 27; // now contains weapon id;
+        
+        return player.getWeapon(message).damage;
+    };
+
+
+    int computeDelay(int message)
+    {
+        /* 
+        this function calculates the deathdelay. 
+        it calculates the weapon id the player has been hit by and
+        returns the specific delay that is attached to that weapon.
+        */
+        message <<=22;
+        message >> 27; // now contains weapon id;
+
+        return player.getWeapon(message).deathdelay;
+    };
 
 
 
