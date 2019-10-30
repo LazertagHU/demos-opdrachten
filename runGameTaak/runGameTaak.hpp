@@ -10,11 +10,20 @@ template<typename T>
 struct typeMessage{
     T       toWrite;
     char    type;
+
+    typeMessage(T toWrite, char type):toWrite(toWrite), type(type){}
 };
 
-class Display{public: void show(typeMessage & msg);};
-class Player{public: int getSome(); void setSome(int x);}
-class Transmitter{public: send(int command);}
+
+class Display{
+public: 
+   
+   template< typename T>
+    void show(typeMessage<T> msg){};
+};
+
+class Player{public: int getSome(); void setSome(int x);};
+class Transmitter{public: void send(int command);};
 
 enum class buttonid
 {
@@ -68,15 +77,17 @@ private:
         int                     remainingGameTime   = 0;
         int                     delay               = 0;  
 
+
         switch (currentState)
         {
         case state_t::IDLE:
+            auto x = typeMessage{"iets", 'M'};
             display.show(typeMessage{"Game Setup", 'M'});
             auto evt = wait(inputChannel + messageFlag);
-            if(evt = inputChannel)
+            if(evt == inputChannel)
             {
                 bnID == inputChannel.read();
-                if(bnID == buttonid::cButton && playerWeaponEntered == true && GameLeader == true)
+                if(bnID == buttonid::cButton && playerWeaponEntered == true && gameLeader == true)
                 {
                     display.show(typeMessage{"Enter Game Time", 'M'});
                     command = 0;
@@ -98,12 +109,12 @@ private:
             else
             {
                 msg = messagepool.read();
-                if(msg == "gametime")
+                if(msg == 10) // gametime
                 {
                     remainingGameTime   = computeGameTime(msg); //----------
                     gameTimeEntered     = true;
                 }
-                else if (msg == "startgame" && gameTimeEntered == true && playerIDEntered == true && playerWeaponEntered == true)
+                else if (msg == 10 /*startgame*/ && gameTimeEntered == true && playerIDEntered == true && playerWeaponEntered == true)
                 {
                     display.show(typeMessage{"Starting game in", 'M'});
                     countdown       = 10 + computeCountdown(msg);
@@ -161,7 +172,7 @@ private:
             }else if( bnID == buttonid::starButton){
                 countdown = 30;
                 display.show(typeMessage{"press * to send start command", 'M'});
-                startCommand = computeStartCommand();
+                startCommand = computeStartCommand(countdown);
                 currentState = state_t::START_GAME_TRANSMISSION_STATE;
             }else{
                     // donno of deze moet
@@ -178,7 +189,7 @@ private:
                 }else if(evt == secondClock){
                     if(countdown > 1){
                         countdown--;
-                        startCommand = computeStartCommand();
+                        startCommand = computeStartCommand(countdown);
                         display.show(typeMessage{countdown, 'T'});
                     }else{
                         display.show(typeMessage{"Starting game", 'M'});
@@ -217,8 +228,8 @@ private:
                         display.show(typeMessage{"hit by", 'M'}); // nog dit uitvogelen
                         currentSubState = substates_runGame_t::HIT;
                     }
-                    if(lives < 0){
-                        currentState = state_t::GAME_OVER:
+                    if(playerpool.read().getSome() < 0){
+                        currentState = state_t::GAME_OVER;
                     }
                 }else if(evt == secondClock){
                     if( remainingGameTime > 0 ){
@@ -228,9 +239,7 @@ private:
                         currentState = state_t::GAME_OVER;
                     }
                 }else{
-                    bnID = inputChannel.read(){
-                        
-                    }
+                    bnID = inputChannel.read();
                 }
                 break;
             
