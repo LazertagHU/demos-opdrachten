@@ -6,7 +6,7 @@
 ProjectName            :=OLED_DISPLAY
 ConfigurationName      :=Debug
 WorkspacePath          :=/home/user/OLED_DISPLAY
-ProjectPath            :=/home/user/OLED_DISPLAY/OLED_CODE
+ProjectPath            :=/home/user/OLED_DISPLAY/demos-opdrachten/OLED_CODE
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
@@ -92,7 +92,7 @@ PreBuild:
 ## Objects
 ##
 $(IntermediateDirectory)/main.cpp$(ObjectSuffix): main.cpp $(IntermediateDirectory)/main.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/user/OLED_DISPLAY/OLED_CODE/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/user/OLED_DISPLAY/demos-opdrachten/OLED_CODE/main.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/main.cpp$(DependSuffix): main.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/main.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/main.cpp$(DependSuffix) -MM main.cpp
 
@@ -100,7 +100,7 @@ $(IntermediateDirectory)/main.cpp$(PreprocessSuffix): main.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/main.cpp$(PreprocessSuffix) main.cpp
 
 $(IntermediateDirectory)/DisplayTaak.cpp$(ObjectSuffix): DisplayTaak.cpp $(IntermediateDirectory)/DisplayTaak.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/user/OLED_DISPLAY/OLED_CODE/DisplayTaak.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DisplayTaak.cpp$(ObjectSuffix) $(IncludePath)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/user/OLED_DISPLAY/demos-opdrachten/OLED_CODE/DisplayTaak.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/DisplayTaak.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/DisplayTaak.cpp$(DependSuffix): DisplayTaak.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/DisplayTaak.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/DisplayTaak.cpp$(DependSuffix) -MM DisplayTaak.cpp
 
