@@ -142,7 +142,7 @@ private:
         for(;;){
             wait(msg_recieved);
             uint32_t msg = msg_pool.read();
-            hwlib::cout << "Message recieved: ";
+            hwlib::cout << "\nMessage recieved: ";
             for (int i = 0; i < 32; i++)
             {
                 hwlib::cout << ((msg >> i)%2);

@@ -20,6 +20,7 @@ private:
             {
                 hwlib::cout << ((msg >> i)%2);
             }
+            hwlib::cout << "\n";
         }
     }
 
