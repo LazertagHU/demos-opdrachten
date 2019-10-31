@@ -67,7 +67,7 @@ private:
         uint32_t n = 0; 
         uint32_t msg = 0;
         for(;;){
-            reset_timer.set(6000);
+            reset_timer.set(5000);
             auto p = wait(pauses + reset_timer);
             if (p == reset_timer)
             {
