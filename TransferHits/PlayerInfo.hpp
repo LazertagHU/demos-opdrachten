@@ -4,6 +4,7 @@
 #include "weapon.hpp"
 #include "hit.hpp"
 
+// Class PlayerInfo that holds the PlayerID, currentWeapon, Hits, Health and hitAmount
 class PlayerInfo {
 private:
     int PlayerID;
@@ -12,6 +13,7 @@ private:
     int health;
     int hitAmount;
 public:
+// Sets the standard health to 100 and hitAmount to 0
     PlayerInfo(){
         health = 100;
         hitAmount = 0;
