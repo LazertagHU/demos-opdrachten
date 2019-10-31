@@ -68,12 +68,12 @@ private:
         ALIVE, WEAPON_COOLDOWN, HIT
     };
 
-    DisplayTaak&                    display;
+    DisplayTaak&                display;
     Transmitter&                transmitter;
     rtos::channel<buttonid, 10> inputChannel;
     rtos::flag                  messageFlag;
-    rtos::pool<int>             messagepool;
-    rtos::pool<Player>&          playerpool;
+    rtos::pool<uint32_t>        messagepool;
+    rtos::pool<Player>&         playerpool;
     rtos::clock                 secondClock;
     rtos::timer                 delayTimer;
 
@@ -178,6 +178,9 @@ public:
 
 
     void inputMessage(buttonid id);
+
+
+
 };
 
 
