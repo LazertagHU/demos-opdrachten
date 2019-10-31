@@ -14,17 +14,7 @@
 #include "TransferHitsControlTaak.hpp"
 #include "InputControlTaak.hpp"
 
-
-enum class buttonid
-{
-    zeroButton, oneButton, twoButton, threeButton,
-    fourButton, fiveButton, sixButton, sevenButton,
-    eightButton, nineButton, aButton, bButton,
-    cButton, dButton, eButton, starButton,
-    hastagButton
-};
-
-class RunGameTaak : public rtos::task<>, msg_listener, InputListener
+class RunGameTaak : public rtos::task<>, public msg_listener, public InputListener
 {
 private:
 
@@ -50,6 +40,7 @@ private:
     rtos::pool<PlayerInfo>&     playerpool;
     rtos::clock                 secondClock;
     rtos::timer                 delayTimer;
+    buttonid                    bnID;
 
     /*
     * Main function of this task
@@ -86,7 +77,7 @@ private:
     * by the game leader at a specific countdown timer.
     * 
     */
-    int computeStartCommand(int countdown);
+    void computeStartCommand(int countdown, uint32_t &startCommand);
 
     /*
     * This function adds two inputs of the keypad together.
@@ -120,7 +111,7 @@ private:
     int computeDeathDelay(uint32_t message);
 
 
-    int computeShootDelay(uint32_t message);
+    int computeShootDelay();
 
     /*
     * This function checks if the message received is a start message;
@@ -130,7 +121,7 @@ private:
     /*
     * This function checks if the message received contains the game time;
     */
-    bool isGameTimeMessage(uint16_t message);
+    bool isGameTimeMessage(uint32_t message);
     
 
 public:
@@ -155,9 +146,6 @@ public:
         secondClock(this, 1'000'000, "secondClock"),
         delayTimer(this, "delayTimer")
     {}
-
-
-    void inputMessage(buttonid id) override;
 
     void sendMessage(uint32_t m ) override;
 

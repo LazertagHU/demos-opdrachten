@@ -6,11 +6,11 @@
 #include "hwlib.hpp"
 
 class pause_detector : public rtos::task<> {
-private:
+protected:
     hwlib::pin_in & irsensor;
     pause_listener & listener;
     rtos::clock interval_clock;
-    hwlib::target::pin_out debugPin = hwlib::target::pin_out( hwlib::target::pins::d7 );
+    //hwlib::target::pin_out debugPin = hwlib::target::pin_out( hwlib::target::pins::d7 );
 
     void main(){
         int n = 0;
@@ -18,17 +18,6 @@ private:
             wait( interval_clock );
             if(!irsensor.read()){ n+=100;  }
             else { 
-                if (n > 1200)
-                {
-                    debugPin.write(1);
-                    debugPin.flush();
-                }
-                else
-                {
-                    debugPin.write(0);
-                    debugPin.flush();
-                }
-                
                 listener.pause_detected( n ); 
                 while( irsensor.read() ){
                     wait( interval_clock );

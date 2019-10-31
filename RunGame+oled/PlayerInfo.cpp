@@ -5,7 +5,7 @@ weapon PlayerInfo::GetWeapon(int n){
     return weapons[n]; 
 }
 
-int playerInfo::GetCurrentWeapon(){ 
+int PlayerInfo::GetCurrentWeapon(){ 
     return currentWeapon;
 }
 
@@ -13,11 +13,11 @@ void PlayerInfo::SetWeapon( int weaponID ){
     currentWeapon = weaponID; 
 }
     
-int PlayerInfo::GetPlayerID(){ 
+unsigned int PlayerInfo::GetPlayerID(){ 
     return PlayerID; 
 }
 
-void PlayerInfo::SetPlayerID( int NewPlayerID ){ 
+void PlayerInfo::SetPlayerID( unsigned int NewPlayerID ){ 
     PlayerID = NewPlayerID; 
 }
 

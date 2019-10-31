@@ -7,7 +7,7 @@
 #include "hwlib.hpp"
 
 class msg_decoder : public pause_listener, rtos::task<> {
-private:
+protected:
     msg_listener & listener;
     rtos::channel < int, 128 > pauses; 
     rtos::timer reset_timer;

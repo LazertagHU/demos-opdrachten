@@ -14,7 +14,7 @@ private:
     rtos::channel<E_Buttons, 10>                                TestChannel;                                               
 public:
 
-    void InputMessage(E_Buttons Ebutton){TestChannel.write(Ebutton);};
+    void InputMessage(E_Buttons Ebutton)override{TestChannel.write(Ebutton);};
 
     TestTaakKeypad():
         task                ("TestTaakKeypad"),

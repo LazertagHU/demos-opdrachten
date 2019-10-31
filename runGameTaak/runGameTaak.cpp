@@ -163,7 +163,7 @@ void RunGameTaak::main()
                 auto evt = wait(messageFlag + secondClock + inputChannel);
                 if(evt == messageFlag)
                 {
-                    msg = messagepool.read();a
+                    msg = messagepool.read();
                     if(isHitMessage(msg))
                     {
                         auto player = playerpool.read();
@@ -431,10 +431,10 @@ int RunGameTaak::computeHit(uint32_t message)
     message <<=22;
     message >> 27; // now contains weapon id;
     
-    return player.getWeapon(message).damage;
+    return playerpool.read().getWeapon(message).damage;
 };
 
-int RunGameTaak::computeDelay(int message)
+int RunGameTaak::computeDelay(uint32_t message)
 {
     /* 
     this function calculates the deathdelay. 
@@ -444,7 +444,7 @@ int RunGameTaak::computeDelay(int message)
     message <<=22;
     message >> 27; // now contains weapon id;
 
-    return player.getWeapon(message).deathdelay;
+    return playerpool.read().get(message).deathdelay;
 };
 
 
