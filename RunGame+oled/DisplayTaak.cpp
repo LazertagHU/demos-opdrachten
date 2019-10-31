@@ -56,35 +56,36 @@ void DisplayTaak::main(){
         switch(state){
             
             case state_t::IDLE:
-            
+                hwlib::cout << "oledwait";
                 auto evt = wait(inputChannel);
-                    auto Message = inputChannel.read();
-                    if(Message.Type == 'M'){
-                        Wmessage.clear();
-                        MessageDisplay  << "\t0000" <<  Message.StringToWrite << hwlib::flush;
-                    }
-                    else if(Message.Type == 'N'){
-                        Wname.clear();
-                        NameDisplay << "\t0000" << "#" << Message.IntToWrite <<hwlib::flush;
-                    }
-                    else if(Message.Type == 'A'){
-                        Wammo.clear();
-                        AmmoDisplay << "\t0000"<<  Message.IntToWrite << hwlib::flush;
-                    }
-                    else if(Message.Type == 'H'){
-                        Whealth.clear();
-                        HealthDisplay   << "\t0000"<< "HP: " << Message.IntToWrite << hwlib::flush;
-                    }
-                    else if(Message.Type == 'T'){
-                        Wtime.clear();
-                        TimeDisplay     << "\t0000"<< Message.IntToWrite <<  hwlib::flush;
-                    }
-                    else if(Message.Type == 'G'){
-                        WweaponT.clear();
-                        WeaponTDisplay  << "\t0000"<< Message.StringToWrite << hwlib::flush;
-                    }
-                    break;
-                
+                auto Message = inputChannel.read();
+                hwlib::cout << "oledread";
+                if(Message.Type == 'M'){
+                    Wmessage.clear();
+                    MessageDisplay  << "\t0000" <<  Message.StringToWrite << hwlib::flush;
+                }
+                else if(Message.Type == 'N'){
+                    Wname.clear();
+                    NameDisplay << "\t0000" << "#" << Message.IntToWrite <<hwlib::flush;
+                }
+                else if(Message.Type == 'A'){
+                    Wammo.clear();
+                    AmmoDisplay << "\t0000"<<  Message.IntToWrite << hwlib::flush;
+                }
+                else if(Message.Type == 'H'){
+                    Whealth.clear();
+                    HealthDisplay   << "\t0000"<< "HP: " << Message.IntToWrite << hwlib::flush;
+                }
+                else if(Message.Type == 'T'){
+                    Wtime.clear();
+                    TimeDisplay     << "\t0000"<< Message.IntToWrite <<  hwlib::flush;
+                }
+                else if(Message.Type == 'G'){
+                    WweaponT.clear();
+                    WeaponTDisplay  << "\t0000"<< Message.StringToWrite << hwlib::flush;
+                }
+                break;
+            
         }
     }
 };

@@ -15,7 +15,9 @@ protected:
     void main(){
         int n = 0;
         for(;;){
+            hwlib::cout << "before interval\n";
             wait( interval_clock );
+             hwlib::cout << "after interval\n";
             if(!irsensor.read()){ n+=100;  }
             else { 
                 listener.pause_detected( n ); 

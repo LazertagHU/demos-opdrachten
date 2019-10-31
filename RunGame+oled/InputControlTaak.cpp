@@ -5,13 +5,10 @@ enum class  InputState_t       {WAIT_FOR_INPUT};
 
 void InputControlTaak::main(){
     InputState_t   InputState =   InputState_t::WAIT_FOR_INPUT;
-    
-    
     for(;;){
         switch(InputState){
             
             case InputState_t::WAIT_FOR_INPUT:
-                auto evt    = wait(InputChannel);
                 Key = InputChannel.read();
                 switch(Key){
                     case '0':
@@ -66,7 +63,8 @@ void InputControlTaak::main(){
                         Inputlistener->InputMessage(buttonid::hastagButton);
                         break;
                         
-                    default: break;
+                    default: 
+                        break;
                         
                 }
 

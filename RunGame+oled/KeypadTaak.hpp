@@ -21,7 +21,9 @@ public:
     task                ("KeypadTaak"),
     KeyTimer            (this, "KeyTimer"),
     Keypadlistener      (Keypadlistener)
-    {}
+    {
+        
+    }
     
     void main();
 };

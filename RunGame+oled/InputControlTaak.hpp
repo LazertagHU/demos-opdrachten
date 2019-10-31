@@ -23,7 +23,6 @@ public:
     InputChannel        (this, "InputChannel"),
     Keypadtaak          (this),
     Buttontaak          (this)
-
     {}
     
     void KeyPressed(char Key){InputChannel.write(Key);};

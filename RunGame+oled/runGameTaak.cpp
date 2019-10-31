@@ -82,8 +82,7 @@ void RunGameTaak::main()
             }
             currentState = state_t::IDLE;
             break;
-            }
-
+        }
         case state_t::WAIT_FOR_WEAPON_NUMBER:{
             int input = waitForInput();
             if(input > 0 && input <= 15)
@@ -99,8 +98,7 @@ void RunGameTaak::main()
             }
             currentState = state_t::IDLE;
             break;
-            }
-
+        }
         case state_t::ENTER_TIME_REMAINING:{
             command = 0;
             int input = waitForInput();
@@ -108,7 +106,8 @@ void RunGameTaak::main()
                 command = calculateCheckSum(input);
                 currentState = state_t::SEND_COMMAND_STATE;
             }
-            break;}
+            break;
+        }
 
         case state_t::SEND_COMMAND_STATE:{
             bnID = inputChannel.read();
@@ -122,7 +121,8 @@ void RunGameTaak::main()
             }else{
                     // donno of deze moet
             }
-            break;}
+            break;
+        }
 
         case state_t::START_GAME_TRANSMISSION_STATE:{
             auto evt = wait(secondClock + inputChannel);
@@ -143,7 +143,8 @@ void RunGameTaak::main()
                     }
                 }
             
-            break;}
+            break;
+        }
 
         case state_t::AFTELLEN:{
             wait(secondClock);
@@ -155,8 +156,9 @@ void RunGameTaak::main()
                 playerpool.write(player);
                 display.showMessage("Alive", 'M');
                 currentState = state_t::RUNGAME;
-            }}
-
+            }
+            break;
+        }
         case state_t::RUNGAME:{
             switch (currentSubState)
             {
@@ -210,8 +212,8 @@ void RunGameTaak::main()
                         // weet niet of dit moet
                     }
                 }
-                break;}
-            
+                break;
+            }
             case substates_runGame_t::WEAPON_COOLDOWN:{
                 auto evt = wait(delayTimer + messageFlag + secondClock);
                 if(evt == messageFlag)
@@ -253,8 +255,8 @@ void RunGameTaak::main()
                 {
                     currentSubState = substates_runGame_t::ALIVE;
                 }
-                break;}
-
+                break;
+            }
             case substates_runGame_t::HIT:{
                 auto evt = wait(delayTimer + secondClock);
                 if (evt == delayTimer)
@@ -275,11 +277,12 @@ void RunGameTaak::main()
                     }
                 }
                 
-                break;}
-
+                break;
+            }
             default:
                 break;
-            }}
+            }
+        }
         case state_t::GAME_OVER:{
             display.showMessage("Game over", 'M');
             bnID = inputChannel.read();
@@ -287,12 +290,14 @@ void RunGameTaak::main()
                 transfer.writing();
             }
 
-            break;}
-        default:
             break;
         }
-    }   
-};
+        default:
+            break;
+        
+        }   
+    }
+}
 
 int RunGameTaak::computeGameTime(int msg)
 {
@@ -481,5 +486,6 @@ void RunGameTaak::sendMessage(uint32_t m){
 }
 
 void RunGameTaak::InputMessage(buttonid id){
+    hwlib::cout << "iets";
     inputChannel.write(id);
 }

@@ -29,11 +29,11 @@ public:
         for(;;){
             
             switch(ButtonState){
-                
-                
                 case ButtonState_t::WAIT_FOR_INPUT:
                     ButtonTimer.set(100000);
+                    
                     wait(ButtonTimer);
+                    hwlib::cout << "buttontimer";
                     if(!Button.read() && !buttonPressed ){
                         buttonPressed = true;
                         Keypadlistener->KeyPressed('E');
