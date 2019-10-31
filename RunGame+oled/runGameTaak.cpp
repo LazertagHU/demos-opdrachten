@@ -9,7 +9,7 @@ void RunGameTaak::main()
     uint32_t                command;    
     uint32_t                debugCommand        = 0b1'01111'00101'00000; // 0b1'01111'00101'01010
     uint32_t                startCommand        = 0b1'00000'10000'00000'1'00000'10000'00000;
-    uint32_t                setTimeCommand      = 0b1'00000'0;
+    uint32_t                setTimeCommand      = 0b1'00000'00000'00000'1'00000'00000'00000;
     uint32_t                msg;
     uint32_t                shootCommand        = 15; // dit moet veranderd worden
     bool                    playerWeaponEntered = false;
@@ -53,17 +53,16 @@ void RunGameTaak::main()
             else
             {
                 msg = messagepool.read();
-                if(msg == 10) // gametime
+                if(isGameTimeMessage(msg)) // gametime
                 {
                     remainingGameTime   = computeGameTime(msg); //----------
                     gameTimeEntered     = true;
                 }
-                else if (msg == 10 /*startgame*/ && gameTimeEntered == true && playerIDEntered == true && playerWeaponEntered == true)
+                else if (isStartMessage(msg) && gameTimeEntered == true && playerIDEntered == true && playerWeaponEntered == true)
                 {
                     display.show("Starting game in", 'M');
                     countdown       = 10 + computeCountdown(msg);
                     currentState    = state_t::AFTELLEN;
-
                 }
             }
             break;
@@ -448,6 +447,18 @@ int RunGameTaak::computeDelay(int message)
 };
 
 
-void RunGameTaak::buttonPressed(buttonid id){
+void RunGameTaak::inputMessage(buttonid id){
     inputChannel.write(id);
-}
+};
+
+bool RunGameTaak::isStartMessage(uint32_t message){
+    return ((msg >> 9) & 1) && ((msg >> 25) & 1);
+};
+
+bool RunGameTaak::isGameTimeMessage(uint32_t message){
+    return (((message >> 9) & 1) == 0) && (((message >> 25) & 1) == 0 );
+};
+
+bool RunGunTaak::isGameTimeMessage(uint32_t message){
+    return ((msg >> 9) & 1 == 0) && ((msg >> 25) & 1 == 0);
+};

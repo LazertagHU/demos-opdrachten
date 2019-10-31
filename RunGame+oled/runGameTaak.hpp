@@ -1,10 +1,12 @@
 #ifndef RUN_GAME_TAAK_HPP
 #define RUN_GAME_TAAK_HPP
 
+#include "DisplayTaak.hpp"
 #include "hwlib.hpp"
 #include "../../hwlib/library/hwlib.hpp"
 #include "rtos.hpp"
 #include "../../rtos/rtos.hpp"
+
 
 class Display{
 public: 
@@ -18,11 +20,17 @@ struct weapon{
     int deathdelay;
 };
 
+class ButtonListener {
+public:
+    virtual void buttonPressed() = 0;
+}
+
 
 class Player{
 private:
     std::array<weapon, 10> weapons{weapon{"pistol", 5, 2}, weapon{"sniper", 20, 5}, weapon{"rifle", 10, 4}};
 public: 
+    Player(){};
     void setID(int id); 
     int getSome(); 
     void setSome(int x); 
@@ -60,12 +68,12 @@ private:
         ALIVE, WEAPON_COOLDOWN, HIT
     };
 
-    Display&                    display;
+    DisplayTaak&                display;
     Transmitter&                transmitter;
     rtos::channel<buttonid, 10> inputChannel;
     rtos::flag                  messageFlag;
-    rtos::pool<int>             messagepool;
-    rtos::pool<Player>          playerpool;
+    rtos::pool<uint32_t>        messagepool;
+    rtos::pool<Player>&         playerpool;
     rtos::clock                 secondClock;
     rtos::timer                 delayTimer;
 
@@ -136,6 +144,16 @@ private:
     * can't shoot or be shot after he has been shot by another player
     */
     int computeDelay(uint32_t message);
+
+    /*
+    * This function checks if the message received is a start message;
+    */
+    bool isStartMessage(uint32_t message);
+
+    /*
+    * This function checks if the message received contains the game time;
+    */
+    bool isGameTimeMessage(uint16_t message);
     
 
 public:
@@ -143,8 +161,9 @@ public:
     * Constructor of RunGameTaak
     */
     RunGameTaak(
-        Display & display, 
-        Transmitter& transmitter
+        DisplayTaak & display, 
+        Transmitter& transmitter,
+        rtos::pool<Player> & playerpool
     ):
         task("runGameTaak"),
         display(display),
@@ -152,13 +171,15 @@ public:
         inputChannel(this, "inputChannel"),
         messageFlag(this, "messageFlag"),
         messagepool("messagepool"),
-        playerpool("playerpool"),
+        playerpool(playerpool),
         secondClock(this, 1'000'000, "secondClock"),
         delayTimer(this, "delayTimer")
     {}
 
 
-    void buttonPressed(buttonid id);
+    void inputMessage(buttonid id);
+
+
 
 };
 
