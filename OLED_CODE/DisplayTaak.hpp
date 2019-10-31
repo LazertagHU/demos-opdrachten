@@ -66,7 +66,8 @@ public:                                                                         
         TypeMessage sendMessage;                                                    //- creeer een TypeMessage struct object voor de Channel
         sendMessage.StringToWrite   = Message;                                      //- Vul de struct met de Message en het dataType
         sendMessage.Type            = oledRec;                                      //
-        inputChannel.write(sendMessage);                                            //- Write de struct in de channel. Nu kan de task het verwerken
+        inputChannel.write(sendMessage); 
+    }                                           //- Write de struct in de channel. Nu kan de task het verwerken
                                                                                     //////////////////////////////////////////////////////////////
     void showMessage(int Message, char oledRec){                                    //- Public functie voor het verwerken van een dataType Int
         TypeMessage sendMessage;                                                    //- Creeer een TypeMessage struct object voor de Channel
@@ -74,8 +75,8 @@ public:                                                                         
         sendMessage.Type            = oledRec;                                      //    
         inputChannel.write(sendMessage);                                            //- Write de struct in de channel. Nu kan de task het verwerken
     }                                                                               //////////////////////////////////////////////////////////////
-                                                                                    //    
-    void main();                                                                    //De rtos::task heeft zijn eigen main die constant draait
+private:                                                                          //    
+    void main() override;                                                                    //De rtos::task heeft zijn eigen main die constant draait
                                                                                     ////////////////////////////////////////////////////////////////
     
     

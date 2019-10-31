@@ -13,7 +13,7 @@ private:
 public:
     gen()
     : counter(0), message(0b1'00100'10101'10001'1'00100'10101'10001), left(0)
-    {
+    { //16 8 8 16 8 8 16 8 16 8 16 16 8 8 8 16 16 8 8 16 8 8 16 8 16 8 16 16 8 8 8 16
         for (int i = 31; i >= 0; i--)
         {
             messageArray[i] = (bool)((message>>i)%2) ? 16 : 8;
@@ -21,6 +21,7 @@ public:
         }
         hwlib::cout << "\n";
     }
+    
     bool read(){
         if (counter == 32){
             counter = 0;
