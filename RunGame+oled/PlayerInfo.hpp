@@ -29,6 +29,8 @@ public:
     void SetHealth( int NewHealth );
     int GetHealth();
     int GethitAmount();
+
+    PlayerInfo.class
 };
 
 #endif
