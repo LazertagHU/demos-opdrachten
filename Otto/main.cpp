@@ -99,7 +99,7 @@ private:
                         n = 0; msg = 0;
                         continue;
                     }
-                    hwlib::cout << " huh";
+                    // hwlib::cout << " huh";
                     listener.sendMessage(msg);
                 }
                 else
