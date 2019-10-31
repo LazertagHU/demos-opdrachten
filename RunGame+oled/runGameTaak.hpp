@@ -6,41 +6,17 @@
 #include "../../hwlib/library/hwlib.hpp"
 #include "rtos.hpp"
 #include "../../rtos/rtos.hpp"
-
-
-class Display{
-public: 
-    void show(char* msg, char x){};
-    void show(int msg, char x){};
-};
-
-struct weapon{
-    const char* name;
-    int damage;
-    int deathdelay;
-};
+#include "weapon.hpp"
+#include "PlayerInfo.hpp"
+#include "SendTask.hpp"
+#include "pause_detector.hpp"
+#include "msg_decoder.hpp"
 
 class ButtonListener {
 public:
     virtual void buttonPressed() = 0;
 }
 
-
-class Player{
-private:
-    std::array<weapon, 10> weapons{weapon{"pistol", 5, 2}, weapon{"sniper", 20, 5}, weapon{"rifle", 10, 4}};
-public: 
-    Player(){};
-    void setID(int id); 
-    int getSome(); 
-    void setSome(int x); 
-    int getLives(); 
-    void setLives(int x); 
-    int getWeaponCooldown(); 
-    int getPlayerID();
-    weapon getWeapon(int n){return weapons[n];}
-
-};
 class Transmitter{public: void send(int command);};
 
 enum class buttonid
@@ -52,7 +28,7 @@ enum class buttonid
     hastagButton
 };
 
-class RunGameTaak : public rtos::task<> 
+class RunGameTaak : public rtos::task<>, msg_listener 
 {
 private:
 
@@ -69,11 +45,11 @@ private:
     };
 
     DisplayTaak&                display;
-    Transmitter&                transmitter;
+    SendTask&                   transmitter;
     rtos::channel<buttonid, 10> inputChannel;
     rtos::flag                  messageFlag;
     rtos::pool<uint32_t>        messagepool;
-    rtos::pool<Player>&         playerpool;
+    rtos::pool<PlayerInfo>&     playerpool;
     rtos::clock                 secondClock;
     rtos::timer                 delayTimer;
 
@@ -143,7 +119,9 @@ private:
     * This function is used to calculate the delay that a player
     * can't shoot or be shot after he has been shot by another player
     */
-    int computeDelay(uint32_t message);
+    int computeDeathDelay(uint32_t message);
+
+    int computeShootDelay(uint32_t message);
 
     /*
     * This function checks if the message received is a start message;
@@ -162,8 +140,8 @@ public:
     */
     RunGameTaak(
         DisplayTaak & display, 
-        Transmitter& transmitter,
-        rtos::pool<Player> & playerpool
+        SendTask& transmitter,
+        rtos::pool<PlayerInfo> & playerpool
     ):
         task("runGameTaak"),
         display(display),
@@ -178,6 +156,8 @@ public:
 
 
     void inputMessage(buttonid id);
+
+    void sendMessage(uint32_t m ) override;
 
 
 
