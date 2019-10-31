@@ -280,7 +280,11 @@ void RunGameTaak::main()
             }
         case state_t::GAME_OVER:
             display.show("Game over", 'M');
-            transferHitsAllowed = true;
+            bnID = inputChannel.read();
+            if(bnID == buttonid::eButton){
+                transfer.writing();
+            }
+
             break;
         default:
             break;
@@ -478,4 +482,8 @@ bool RunGameTaak::isGameTimeMessage(uint32_t message){
 
 void RunGameTaak::sendMessage(uint32_t m){
     messagepool.write(m); messageFlag.set();
+}
+
+void RunGameTaak::InputMessage(buttonid id){
+    inputChannel.write(id);
 }

@@ -11,13 +11,9 @@
 #include "SendTask.hpp"
 #include "pause_detector.hpp"
 #include "msg_decoder.hpp"
+#include "TransferHitsControlTaak.hpp"
+#include "InputControlTaak.hpp"
 
-class ButtonListener {
-public:
-    virtual void buttonPressed() = 0;
-}
-
-class Transmitter{public: void send(int command);};
 
 enum class buttonid
 {
@@ -28,7 +24,7 @@ enum class buttonid
     hastagButton
 };
 
-class RunGameTaak : public rtos::task<>, msg_listener 
+class RunGameTaak : public rtos::task<>, msg_listener, InputListener
 {
 private:
 
@@ -46,6 +42,8 @@ private:
 
     DisplayTaak&                display;
     SendTask&                   transmitter;
+    TransferHitsControlTaak&    transfer;
+    InputControlTaak            inputControl;
     rtos::channel<buttonid, 10> inputChannel;
     rtos::flag                  messageFlag;
     rtos::pool<uint32_t>        messagepool;
@@ -121,6 +119,7 @@ private:
     */
     int computeDeathDelay(uint32_t message);
 
+
     int computeShootDelay(uint32_t message);
 
     /*
@@ -141,11 +140,14 @@ public:
     RunGameTaak(
         DisplayTaak & display, 
         SendTask& transmitter,
+        TransferHitsControlTaak& transfer,
         rtos::pool<PlayerInfo> & playerpool
     ):
         task("runGameTaak"),
         display(display),
         transmitter(transmitter),
+        transfer(transfer),
+        inputControl(this),
         inputChannel(this, "inputChannel"),
         messageFlag(this, "messageFlag"),
         messagepool("messagepool"),
@@ -155,11 +157,11 @@ public:
     {}
 
 
-    void inputMessage(buttonid id);
+    void inputMessage(buttonid id) override;
 
     void sendMessage(uint32_t m ) override;
 
-
+    void InputMessage(buttonid id)override;
 
 };
 
