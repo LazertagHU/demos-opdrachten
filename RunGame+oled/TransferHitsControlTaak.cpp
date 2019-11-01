@@ -13,6 +13,7 @@ void TransferHitsControlTaak::main(){
         switch( state ){
             case states::IDLE:
                 wait( TransferEnableFlag );
+            // break;
                 PlayerInfo player = entity_pool.read();
                 int playerID = player.GetPlayerID();
                 auto hits = player.GetHits();

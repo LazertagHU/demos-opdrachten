@@ -56,6 +56,7 @@ void DisplayTaak::main(){
         switch(state){
             case display_state_t::IDLE:{
                 auto Message = inputChannel.read();
+            // break;
                 if(Message.Type == 'M'){
                     Wmessage.clear();
                     MessageDisplay  << "\t0000"; 

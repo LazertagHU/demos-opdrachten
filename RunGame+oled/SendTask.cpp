@@ -17,6 +17,7 @@ void SendTask::main(){
             // to read the bit at the given position. After this it checks the bits value and sends it to the next state.
             case states::IDLE:
                 wait( SendFlag );
+            // break;
                 i = 31;
                 message = sendpool.read();
                 bit = (message >> i) & 1;

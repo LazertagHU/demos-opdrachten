@@ -1,6 +1,7 @@
 #include "runGameTaak.hpp"
 
 
+
 int main(){
     namespace target = hwlib::target;
 
@@ -16,6 +17,14 @@ int main(){
     tsop_vdd.flush();
     
     /* constructing player pool */
+    auto player = PlayerInfo();
+    auto hits = hit();
+    HWLIB_TRACE << "player_t: " << sizeof(PlayerInfo);
+    HWLIB_TRACE << "hit_t: " <<sizeof(hit);
+    HWLIB_TRACE << "playerObj: " << sizeof(player);
+    HWLIB_TRACE << "hitObj: " <<sizeof(hit);
+    HWLIB_TRACE;
+
     auto playerpool         = rtos::pool<PlayerInfo>("playerpool");
     
     /* constructing tasks */

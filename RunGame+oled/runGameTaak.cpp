@@ -28,8 +28,10 @@ void RunGameTaak::main()
             hwlib::cout << '8' << hwlib::endl;
             display.showMessage("Game Setup", 'M') ;
             auto evt = wait(inputChannel ); /*messageFlag*/
+            HWLIB_TRACE;
             if(evt == inputChannel)
             {
+                HWLIB_TRACE;
                 bnID = inputChannel.read();
                 if(bnID == buttonid::cButton && playerWeaponEntered == true && gameLeader == true)
                 {
@@ -49,6 +51,7 @@ void RunGameTaak::main()
             }
             else
             {
+                HWLIB_TRACE;
                 hwlib::cout << "msg";
                 msg = messagepool.read();
                 if(isGameTimeMessage(msg)) // gametime
@@ -63,6 +66,7 @@ void RunGameTaak::main()
                     currentState    = state_t::AFTELLEN;
                 }
             }
+            HWLIB_TRACE;
             break;
         }
         case state_t::WAIT_FOR_PLAYER_NUMBER:{
@@ -85,15 +89,15 @@ void RunGameTaak::main()
         case state_t::WAIT_FOR_WEAPON_NUMBER:{
             int input = waitForInput('A');
             if(input > 0 && input <= 15){
-                // hwlib::cout << "1" << hwlib::endl;
+                hwlib::cout << "1" << hwlib::endl;
                 auto tmp = playerpool.read();
-                // hwlib::cout << "2" << hwlib::endl;
+                hwlib::cout << "2" << hwlib::endl;
                 tmp.SetWeapon(input);
-                // hwlib::cout << "3" << hwlib::endl;
+                hwlib::cout << "3" << hwlib::endl;
                 playerpool.write(tmp);
-                // hwlib::cout << '4' << hwlib::endl;
+                hwlib::cout << '4' << hwlib::endl;
                 playerWeaponEntered = true;
-                // hwlib::cout << '5' << hwlib::endl;
+                hwlib::cout << '5' << hwlib::endl;
             }
             else
             {

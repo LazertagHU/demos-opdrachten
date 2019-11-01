@@ -8,9 +8,9 @@
 class PlayerInfo {
 private:
     unsigned int PlayerID;
-    std::array<weapon, 10> weapons{weapon{"pistol", 5, 2, 1}, weapon{"sniper", 20, 5, 3}, weapon{"rifle", 10, 4, 2}};
+    std::array<weapon, 10> weapons{weapon{"pistol", 5, 2, 1}, weapon{"sniper", 10, 4, 2}};
     int currentWeapon;
-    hit hits[100];
+    hit hits[10]; // 100 breekt alles, 50 breek het op een andere manier. 10 werkt volledig
     int health;
     int hitAmount;
 public:
