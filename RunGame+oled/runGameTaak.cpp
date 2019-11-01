@@ -481,10 +481,10 @@ bool RunGameTaak::isGameTimeMessage(uint32_t message){
 // };
 
 
-void RunGameTaak::SendMessage(uint32_t m){
+void RunGameTaak::sendMessage(uint32_t m){
     messagepool.write(m); messageFlag.set();
 }
 
-void RunGameTaak::InputMessage(buttonid id){}
+void RunGameTaak::InputMessage(buttonid id){
     inputChannel.write(id);
 }
