@@ -56,7 +56,7 @@ private:
     * of the upcoming game.
     * This function decodes that command and returns the gametime. 
     */
-    int computeGameTime(int msg);
+    uint32_t computeGameTime(uint32_t msg);
 
     /*
     * The game leader can send a specific command which tells the player 
@@ -66,7 +66,7 @@ private:
     * This function decodes that message and translates it in to the proper
     * countdown.
     */
-    int computeCountdown(int msg);
+    uint32_t computeCountdown(uint32_t msg);
 
     /*
     * The game leader can send a specific command which tells the player 
@@ -77,7 +77,7 @@ private:
     * by the game leader at a specific countdown timer.
     * 
     */
-    void computeStartCommand(int countdown, uint32_t &startCommand);
+    void computeStartCommand(uint32_t countdown, uint32_t &startCommand);
 
     /*
     * This function adds two inputs of the keypad together.
@@ -122,6 +122,9 @@ private:
     * This function checks if the message received contains the game time;
     */
     bool isGameTimeMessage(uint32_t message);
+
+
+    uint32_t getEnemyID(uint32_t message);
     
 
 public:

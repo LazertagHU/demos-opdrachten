@@ -1,7 +1,7 @@
 #include "SendTask.hpp"
 
 // Writes the CommandID to the sendpool and sets the SendFlag
-void SendTask::SendMessage( int CommandID ){
+void SendTask::SendMessage( uint32_t CommandID ){
     sendpool.write( CommandID );
     SendFlag.set();
 }
@@ -17,11 +17,10 @@ void SendTask::main(){
             // to read the bit at the given position. After this it checks the bits value and sends it to the next state.
             case states::IDLE:
                 wait( SendFlag );
-            // break;
                 i = 31;
                 message = sendpool.read();
                 bit = (message >> i) & 1;
-                laser.write(1);
+                //laser.write(1);
                 if( bit == 1 ){
                     state = states::SENDHIGH1;
                 }else{
@@ -50,8 +49,8 @@ void SendTask::main(){
                     led.write(1);
                     hwlib::wait_ms( 1 );
                     led.write(0);
-                    hwlib::wait_ms( weapondelay );
-                    laser.write(0);
+                    // hwlib::wait_ms( weapondelay );
+                    // laser.write(0);
                     state = states::IDLE;
                     break;
                 }
@@ -84,8 +83,8 @@ void SendTask::main(){
                     led.write(1);
                     hwlib::wait_ms( 1);
                     led.write(0);
-                    hwlib::wait_ms( weapondelay );
-                    laser.write(0);
+                    // hwlib::wait_ms( weapondelay );
+                    // laser.write(0);
                     state = states::IDLE;
                     break;
                 }

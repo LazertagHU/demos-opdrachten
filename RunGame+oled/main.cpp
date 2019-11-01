@@ -5,6 +5,8 @@
 int main(){
     namespace target = hwlib::target;
 
+    hwlib::wait_ms(500);
+
     /* constructing pins */
     auto lasersight         = hwlib::target::pin_out( hwlib::target::pins::d1 );
     auto led                = hwlib::target::d2_36kHz();
@@ -21,21 +23,21 @@ int main(){
     /* constructing player pool */
     auto player = PlayerInfo();
     auto hits = hit();
-    HWLIB_TRACE << "player_t: " << sizeof(PlayerInfo);
-    HWLIB_TRACE << "hit_t: " <<sizeof(hit);
-    HWLIB_TRACE << "playerObj: " << sizeof(player);
-    HWLIB_TRACE << "hitObj: " <<sizeof(hit);
-    HWLIB_TRACE;
+    // HWLIB_TRACE << "player_t: " << sizeof(PlayerInfo);
+    // HWLIB_TRACE << "hit_t: " <<sizeof(hit);
+    // HWLIB_TRACE << "playerObj: " << sizeof(player);
+    // HWLIB_TRACE << "hitObj: " <<sizeof(hit);
+    // HWLIB_TRACE;
 
     auto playerpool         = rtos::pool<PlayerInfo>("playerpool");
     
     /* constructing tasks */
     auto display            = DisplayTaak();
     auto transfer           = TransferHitsControlTaak(playerpool);
-    auto transmitter        = SendTask( "InputTask", led, lasersight, 500 );
+    auto transmitter        = SendTask( "InputTask", led, lasersight, 1000 );
     auto runGame            = RunGameTaak(display, transmitter, transfer, playerpool);   
-    // auto decoder            = msg_decoder("decoder", runGame);
-    // auto pause_detection    = pause_detector("pause_detector", ir_sensor, decoder);
+    auto decoder            = msg_decoder("decoder", runGame);
+    auto pause_detection    = pause_detector("pause_detector", ir_sensor, decoder);
 
     /* run rtos */
     rtos::run();

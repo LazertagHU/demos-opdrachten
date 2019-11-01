@@ -3,6 +3,8 @@
 
 #include "hwlib.hpp"
 #include "rtos.hpp"
+#include "../../rtos/rtos.hpp"
+#include "../../hwlib/library/hwlib.hpp"
 
 class SendTask : public rtos::task<> {
 private:
@@ -26,7 +28,7 @@ public:
         sendpool( "sendpool" )
     {}
 
-    void SendMessage( int CommandID );
+    void SendMessage( uint32_t CommandID );
 };
 
 #endif
