@@ -54,7 +54,7 @@ struct TypeMessage{                                                             
 class DisplayTaak : public rtos::task<>{                                            //- Rtos::task voor de OLED display   
 private:                                                                            //- Deze task zal constant wachten op nieuwe data,
                                                                                     //  en het meegegeven data type, waarmee de task zelf    
-    rtos::channel<TypeMessage, 5>         inputChannel;                             //  kan beslissen waar op het scherm de data 
+    rtos::channel<TypeMessage, 10>         inputChannel;                             //  kan beslissen waar op het scherm de data 
                                                                                     //  verwerkt moet worden
 public:                                                                             //////////////////////////////////////////////////////////////                
                                                                                     //
@@ -64,7 +64,8 @@ public:                                                                         
     {}                                                                              //
                                                                                     //////////////////////////////////////////////////////////////
                                                                                     //
-    void showMessage(const char* Message, char oledRec){                            //- Public functie voor het verwerken van een dataType String
+    void showMessage(const char* Message, char oledRec){  
+        hwlib::cout << "in showmsg" << std::endl;                          //- Public functie voor het verwerken van een dataType String
         TypeMessage sendMessage;                                                    //- creeer een TypeMessage struct object voor de Channel
         sendMessage.StringToWrite   = Message;                                      //- Vul de struct met de Message en het dataType
         sendMessage.Type            = oledRec;                                      //

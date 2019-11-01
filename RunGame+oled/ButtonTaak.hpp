@@ -4,9 +4,6 @@
 #include "rtos.hpp"
 #include "KeypadListener.hpp"
 
-enum class ButtonState_t        {WAIT_FOR_INPUT, PRESSED};
-
-
 class ButtonTaak : public rtos::task<>{
 private:
 
@@ -23,7 +20,7 @@ public:
     {}
     
     void main() override{
-        
+        enum class ButtonState_t        {WAIT_FOR_INPUT, PRESSED};
         ButtonState_t ButtonState       = ButtonState_t::WAIT_FOR_INPUT;
         auto Button = hwlib::target::pin_in(hwlib::target::pins::d3);
         

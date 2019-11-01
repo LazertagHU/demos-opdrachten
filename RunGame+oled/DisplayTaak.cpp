@@ -48,24 +48,21 @@ void DisplayTaak::main(){
     HealthRectangle.draw(Wrectangle);   hwlib::wait_ms(1);
     TimeRectangle.draw(Wrectangle); hwlib::wait_ms(1);
     oled.flush();  hwlib::wait_ms(1);
-    enum class state_t        {IDLE};
-    state_t         state   = state_t::IDLE;
+    enum class display_state_t        {IDLE};
+    display_state_t         state   = display_state_t::IDLE;
  
    
     for(;;){
         switch(state){
-            case state_t::IDLE:{
-                hwlib::cout << "oledwait";
-                auto evt = wait(inputChannel);
+            case display_state_t::IDLE:{
                 auto Message = inputChannel.read();
-                hwlib::cout << "oledread";
                 if(Message.Type == 'M'){
                     Wmessage.clear();
-                    hwlib::wait_ms(1);
+                    //hwlib::wait_ms(1);
                     MessageDisplay  << "\t0000"; 
-                    hwlib::wait_ms(1);
+                    //hwlib::wait_ms(1);
                     MessageDisplay <<  Message.StringToWrite;
-                    hwlib::wait_ms(1);
+                    //hwlib::wait_ms(1);
                     MessageDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'N'){

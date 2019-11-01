@@ -25,15 +25,15 @@ void RunGameTaak::main()
         switch (currentState)
         {
         case state_t::IDLE:{
+            hwlib::cout << '8' << hwlib::endl;
             display.showMessage("Game Setup", 'M') ;
-            auto evt = wait(inputChannel + messageFlag);
-            //auto evt = wait(secondClock);
+            auto evt = wait(inputChannel ); /*messageFlag*/
             if(evt == inputChannel)
             {
                 bnID = inputChannel.read();
                 if(bnID == buttonid::cButton && playerWeaponEntered == true && gameLeader == true)
                 {
-                    display.showMessage("Enter Game Time", 'M');
+                    display.showMessage("Enter Game\nTime", 'M');
                     command = 0;
                     currentState = state_t::ENTER_TIME_REMAINING;
                 }
@@ -43,15 +43,13 @@ void RunGameTaak::main()
                     currentState = state_t::WAIT_FOR_WEAPON_NUMBER;
                 }else if(bnID == buttonid::aButton)
                 {
-                    display.showMessage("Enter a player ID", 'M');
+                    display.showMessage("Enter a player\nID", 'M');
                     currentState = state_t::WAIT_FOR_PLAYER_NUMBER;
-                }
-                else{
-                    // weet niet of deze geprogrammeerd moet worden???
                 }
             }
             else
             {
+                hwlib::cout << "msg";
                 msg = messagepool.read();
                 if(isGameTimeMessage(msg)) // gametime
                 {
@@ -75,6 +73,7 @@ void RunGameTaak::main()
                 player.SetPlayerID(input);
                 playerpool.write(player);
                 playerIDEntered = true;
+                
             }
             else
             {
@@ -87,16 +86,23 @@ void RunGameTaak::main()
             int input = waitForInput();
             if(input > 0 && input <= 15)
             {
+                hwlib::cout << "1" << hwlib::endl;
                 auto player = playerpool.read();
+                hwlib::cout << "2" << hwlib::endl;
                 player.SetWeapon(input);
+                hwlib::cout << "3" << hwlib::endl;
                 playerpool.write(player);
+                hwlib::cout << '4' << hwlib::endl;
                 playerWeaponEntered = true;
+                hwlib::cout << '5' << hwlib::endl;
             }
             else
             {
                 display.showMessage("invalid weapon id", 'M');
             }
+            hwlib::cout << '6' << hwlib::endl;
             currentState = state_t::IDLE;
+            hwlib::cout << '7' << hwlib::endl;
             break;
         }
         case state_t::ENTER_TIME_REMAINING:{

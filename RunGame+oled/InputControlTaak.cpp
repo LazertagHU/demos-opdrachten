@@ -1,9 +1,7 @@
 #include "InputControlTaak.hpp"
 
-enum class  InputState_t       {WAIT_FOR_INPUT};
-
-
 void InputControlTaak::main(){
+    enum class  InputState_t       {WAIT_FOR_INPUT};
     InputState_t   InputState =   InputState_t::WAIT_FOR_INPUT;
     for(;;){
         switch(InputState){
@@ -45,7 +43,7 @@ void InputControlTaak::main(){
                         Inputlistener->InputMessage(buttonid::aButton);
                         break;
                     case 'B':
-                        Inputlistener->InputMessage(buttonid::aButton);
+                        Inputlistener->InputMessage(buttonid::bButton);
                         break;
                     case 'C':
                         Inputlistener->InputMessage(buttonid::cButton);
