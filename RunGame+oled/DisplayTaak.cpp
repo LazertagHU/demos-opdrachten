@@ -12,7 +12,7 @@ void DisplayTaak::main(){
     
     auto Wmessage           = hwlib::part(oled, hwlib::xy(3, 20), hwlib::xy(123,25));
     auto Wname              = hwlib::part(oled, hwlib::xy(3, 5), hwlib::xy(32,10));
-    auto WweaponT           = hwlib::part(oled, hwlib::xy(38, 5), hwlib::xy(100,14));
+    auto WweaponT           = hwlib::part(oled, hwlib::xy(38, 5), hwlib::xy(61,9));
     auto Wammo              = hwlib::part(oled, hwlib::xy(100, 5), hwlib::xy(26,9));
     auto Whealth            = hwlib::part(oled, hwlib::xy(3, 53), hwlib::xy(60, 10));
     auto Wtime              = hwlib::part(oled, hwlib::xy(67, 53), hwlib::xy(60,10));
@@ -94,9 +94,9 @@ void DisplayTaak::main(){
 
 void DisplayTaak::showMessage(const char* Message, char oledRec){  
                             //- Public functie voor het verwerken van een dataType String
-    TypeMessage sendMessage{1, Message, oledRec};                                                   //- creeer een TypeMessage struct object voor de Channel
-    // sendMessage.StringToWrite   = Message;                                      //- Vul de struct met de Message en het dataType
-    // sendMessage.Type            = oledRec;                                      //
+    TypeMessage sendMessage;                                                  //- creeer een TypeMessage struct object voor de Channel
+    sendMessage.StringToWrite   = Message;                                      //- Vul de struct met de Message en het dataType
+    sendMessage.Type            = oledRec;                                      //
     inputChannel.write(sendMessage); 
 }          
 

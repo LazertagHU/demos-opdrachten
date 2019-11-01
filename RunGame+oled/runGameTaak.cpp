@@ -25,13 +25,10 @@ void RunGameTaak::main()
         switch (currentState)
         {
         case state_t::IDLE:{
-            hwlib::cout << '8' << hwlib::endl;
             display.showMessage("Game Setup", 'M') ;
             auto evt = wait(inputChannel ); /*messageFlag*/
-            HWLIB_TRACE;
             if(evt == inputChannel)
             {
-                HWLIB_TRACE;
                 bnID = inputChannel.read();
                 if(bnID == buttonid::cButton && playerWeaponEntered == true && gameLeader == true)
                 {
@@ -51,7 +48,6 @@ void RunGameTaak::main()
             }
             else
             {
-                HWLIB_TRACE;
                 hwlib::cout << "msg";
                 msg = messagepool.read();
                 if(isGameTimeMessage(msg)) // gametime
@@ -66,22 +62,21 @@ void RunGameTaak::main()
                     currentState    = state_t::AFTELLEN;
                 }
             }
-            HWLIB_TRACE;
             break;
         }
         case state_t::WAIT_FOR_PLAYER_NUMBER:{
             int input = waitForInput('N');
             if(input > 0 && input <= 15)
             {
-                // auto player = playerpool.read();
-                // player.SetPlayerID(input);
-                // playerpool.write(player);
+                auto player = playerpool.read();
+                player.SetPlayerID(input);
+                playerpool.write(player);
                 playerIDEntered = true;
-                
             }
             else
             {
                 display.showMessage("invalid player id", 'M');
+                display.showMessage(-1, 'N');
             }
             currentState = state_t::IDLE;
             break;
@@ -89,29 +84,25 @@ void RunGameTaak::main()
         case state_t::WAIT_FOR_WEAPON_NUMBER:{
             int input = waitForInput('A');
             if(input > 0 && input <= 15){
-                hwlib::cout << "1" << hwlib::endl;
-                auto tmp = playerpool.read();
-                hwlib::cout << "2" << hwlib::endl;
-                tmp.SetWeapon(input);
-                hwlib::cout << "3" << hwlib::endl;
-                playerpool.write(tmp);
-                hwlib::cout << '4' << hwlib::endl;
+                auto player = playerpool.read();
+                player.SetWeapon(input);
+                playerpool.write(player);
                 playerWeaponEntered = true;
-                hwlib::cout << '5' << hwlib::endl;
+                display.showMessage(player.GetWeapon(input).name, 'G');
             }
             else
             {
                 display.showMessage("invalid weapon id", 'M');
+                display.showMessage(-1, 'A');
             }
-            hwlib::cout << '6' << hwlib::endl;
             currentState = state_t::IDLE;
-            hwlib::cout << '7' << hwlib::endl;
             break;
         }
         case state_t::ENTER_TIME_REMAINING:{
             command = 0;
             int input = waitForInput('T');
             if(input > 0 && input <= 20){
+                remainingGameTime = input;
                 command = calculateCheckSum(input);
                 currentState = state_t::SEND_COMMAND_STATE;
             }
@@ -174,6 +165,7 @@ void RunGameTaak::main()
             switch (currentSubState)
             {
             case substates_runGame_t::ALIVE:{
+                hwlib::cout << remainingGameTime << hwlib::endl;
                 auto evt = wait(messageFlag + secondClock + inputChannel);
                 if(evt == messageFlag)
                 {
@@ -203,8 +195,7 @@ void RunGameTaak::main()
                 {
                     if( remainingGameTime > 0 )
                     {
-                        remainingGameTime--;
-                        display.showMessage(remainingGameTime, 'T');
+                        display.showMessage(--remainingGameTime, 'T');
                     }
                     else
                     {
@@ -293,6 +284,7 @@ void RunGameTaak::main()
             default:
                 break;
             }
+            break;
         }
         case state_t::GAME_OVER:{
             display.showMessage("Game over", 'M');

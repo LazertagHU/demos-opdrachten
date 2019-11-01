@@ -8,6 +8,8 @@ int main(){
     /* constructing pins */
     auto lasersight         = hwlib::target::pin_out( hwlib::target::pins::d1 );
     auto led                = hwlib::target::d2_36kHz();
+
+    
     auto ir_sensor          = target::pin_in( target::pins::d8 );   
     auto tsop_gnd           = target::pin_out( target::pins::d9 );
     auto tsop_vdd           = target::pin_out( target::pins::d10 );
@@ -29,7 +31,6 @@ int main(){
     
     /* constructing tasks */
     auto display            = DisplayTaak();
-    //auto display            = Display();
     auto transfer           = TransferHitsControlTaak(playerpool);
     auto transmitter        = SendTask( "InputTask", led, lasersight, 500 );
     auto runGame            = RunGameTaak(display, transmitter, transfer, playerpool);   
