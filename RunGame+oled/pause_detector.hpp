@@ -7,25 +7,12 @@
 
 class pause_detector : public rtos::task<> {
 protected:
-    hwlib::pin_in & irsensor;
-    pause_listener & listener;
-    rtos::clock interval_clock;
-    //hwlib::target::pin_out debugPin = hwlib::target::pin_out( hwlib::target::pins::d7 );
+    hwlib::pin_in&     irsensor;
+    pause_listener&    listener;
+    rtos::clock         interval_clock;
+    hwlib::target::pin_out debugPin = hwlib::target::pin_out( hwlib::target::pins::d7 );
 
-    void main(){
-        int n = 0;
-        for(;;){
-            wait( interval_clock );
-            if(!irsensor.read()){ n+=100;  }
-            else { 
-                listener.pause_detected( n ); 
-                while( irsensor.read() ){
-                    wait( interval_clock );
-                }
-                n = 0;
-            } 
-        }
-    }
+    void main() override;
 
 public:
     pause_detector(

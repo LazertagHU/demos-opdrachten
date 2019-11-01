@@ -4,7 +4,7 @@
 enum class KeypadState_t        {WAIT_FOR_INPUT};
 
 void KeypadTaak::main(){
-    
+    hwlib::cout << "\nkeypadtaakMAIN\n";
 
     KeypadState_t   KeypadState =   KeypadState_t::WAIT_FOR_INPUT;
     auto out0                   =   hwlib::target::pin_oc(hwlib::target::pins::a0);
@@ -24,11 +24,14 @@ void KeypadTaak::main(){
     auto Keypad                 =   hwlib::keypad<16>(matrix, "147*2580369#ABCDE");
     
     for(;;){
+        
         switch(KeypadState){
             
             case KeypadState_t::WAIT_FOR_INPUT:
                 KeyTimer.set(20000);
+                hwlib::cout << "keypad interval1\n";
                 auto evt    = wait(KeyTimer);
+                hwlib::cout << "keypad interval2\n";
                 Temp = Keypad.pressed();
                 if(Temp == '\0'){
                     break;
@@ -41,6 +44,4 @@ void KeypadTaak::main(){
         }
         
     }
-    
-    
 }

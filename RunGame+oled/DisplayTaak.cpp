@@ -40,14 +40,14 @@ void DisplayTaak::main(){
     hwlib::rectangle TimeRectangle(hwlib::xy(64, 49), hwlib::xy(127,63));                                      //
 
     
-    oled.clear();  hwlib::wait_ms(1);
-    oled.flush();  hwlib::wait_ms(1);
-    MessageRectangle.draw(Wrectangle);  hwlib::wait_ms(1);
-    NameRectangle.draw(Wrectangle);  hwlib::wait_ms(1);
-    AmmoRectangle.draw(Wrectangle);  hwlib::wait_ms(1);  
-    HealthRectangle.draw(Wrectangle);   hwlib::wait_ms(1);
-    TimeRectangle.draw(Wrectangle); hwlib::wait_ms(1);
-    oled.flush();  hwlib::wait_ms(1);
+    oled.clear(); 
+    oled.flush();
+    MessageRectangle.draw(Wrectangle);  
+    NameRectangle.draw(Wrectangle);  
+    AmmoRectangle.draw(Wrectangle);   
+    HealthRectangle.draw(Wrectangle);  
+    TimeRectangle.draw(Wrectangle); 
+    oled.flush();
     enum class display_state_t        {IDLE};
     display_state_t         state   = display_state_t::IDLE;
  
@@ -58,11 +58,8 @@ void DisplayTaak::main(){
                 auto Message = inputChannel.read();
                 if(Message.Type == 'M'){
                     Wmessage.clear();
-                    //hwlib::wait_ms(1);
                     MessageDisplay  << "\t0000"; 
-                    //hwlib::wait_ms(1);
                     MessageDisplay <<  Message.StringToWrite;
-                    //hwlib::wait_ms(1);
                     MessageDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'N'){
@@ -92,3 +89,19 @@ void DisplayTaak::main(){
         }
     }
 };
+
+
+void DisplayTaak::showMessage(const char* Message, char oledRec){  
+                            //- Public functie voor het verwerken van een dataType String
+    TypeMessage sendMessage{1, Message, oledRec};                                                   //- creeer een TypeMessage struct object voor de Channel
+    // sendMessage.StringToWrite   = Message;                                      //- Vul de struct met de Message en het dataType
+    // sendMessage.Type            = oledRec;                                      //
+    inputChannel.write(sendMessage); 
+}          
+
+void DisplayTaak::showMessage(int Message, char oledRec){                                    //- Public functie voor het verwerken van een dataType Int
+    TypeMessage sendMessage;                                                    //- Creeer een TypeMessage struct object voor de Channel
+    sendMessage.IntToWrite   = Message;                                         //- Vul de struct met de Message en het dataType    
+    sendMessage.Type            = oledRec;                                      //    
+    inputChannel.write(sendMessage);                                            //- Write de struct in de channel. Nu kan de task het verwerken                         
+}           

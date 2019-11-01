@@ -64,20 +64,9 @@ public:                                                                         
     {}                                                                              //
                                                                                     //////////////////////////////////////////////////////////////
                                                                                     //
-    void showMessage(const char* Message, char oledRec){  
-        hwlib::cout << "in showmsg" << std::endl;                          //- Public functie voor het verwerken van een dataType String
-        TypeMessage sendMessage;                                                    //- creeer een TypeMessage struct object voor de Channel
-        sendMessage.StringToWrite   = Message;                                      //- Vul de struct met de Message en het dataType
-        sendMessage.Type            = oledRec;                                      //
-        inputChannel.write(sendMessage); 
-    }                                                                               //- Write de struct in de channel. Nu kan de task het verwerken
+    void showMessage(const char* Message, char oledRec);                            //- Write de struct in de channel. Nu kan de task het verwerken
                                                                                     //////////////////////////////////////////////////////////////
-    void showMessage(int Message, char oledRec){                                    //- Public functie voor het verwerken van een dataType Int
-        TypeMessage sendMessage;                                                    //- Creeer een TypeMessage struct object voor de Channel
-        sendMessage.IntToWrite   = Message;                                         //- Vul de struct met de Message en het dataType    
-        sendMessage.Type            = oledRec;                                      //    
-        inputChannel.write(sendMessage);                                            //- Write de struct in de channel. Nu kan de task het verwerken
-    }                                                                               //////////////////////////////////////////////////////////////
+    void showMessage(int Message, char oledRec);                                       //////////////////////////////////////////////////////////////
 private:                                                                            //    
     void main() override;                                                           //De rtos::task heeft zijn eigen main die constant draait
                                                                                     ////////////////////////////////////////////////////////////////
