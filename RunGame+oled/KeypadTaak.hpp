@@ -9,7 +9,7 @@
 class KeypadTaak : public rtos::task<>{
 private:
 
-    rtos::timer                                         KeyTimer;
+    rtos::clock                                         KeyClock;
     int                                                 Temp = 0;
     char                                                Key  = '\0';
     KeypadListener                                      *Keypadlistener;
@@ -19,7 +19,7 @@ private:
 public:
     KeypadTaak(KeypadListener *Keypadlistener):
     task                ("KeypadTaak"),
-    KeyTimer            (this, "KeyTimer"),
+    KeyClock(this, 100'000, "KeyClock"),
     Keypadlistener      (Keypadlistener)
     {
         

@@ -40,29 +40,33 @@ void DisplayTaak::main(){
     hwlib::rectangle TimeRectangle(hwlib::xy(64, 49), hwlib::xy(127,63));                                      //
 
     
-    oled.clear();
-    oled.flush();
-    MessageRectangle.draw(Wrectangle);
-    NameRectangle.draw(Wrectangle);
-    AmmoRectangle.draw(Wrectangle);      
-    HealthRectangle.draw(Wrectangle);   
-    TimeRectangle.draw(Wrectangle);
-    oled.flush();
+    oled.clear();  hwlib::wait_ms(1);
+    oled.flush();  hwlib::wait_ms(1);
+    MessageRectangle.draw(Wrectangle);  hwlib::wait_ms(1);
+    NameRectangle.draw(Wrectangle);  hwlib::wait_ms(1);
+    AmmoRectangle.draw(Wrectangle);  hwlib::wait_ms(1);  
+    HealthRectangle.draw(Wrectangle);   hwlib::wait_ms(1);
+    TimeRectangle.draw(Wrectangle); hwlib::wait_ms(1);
+    oled.flush();  hwlib::wait_ms(1);
     enum class state_t        {IDLE};
     state_t         state   = state_t::IDLE;
  
    
     for(;;){
         switch(state){
-            
-            case state_t::IDLE:
+            case state_t::IDLE:{
                 hwlib::cout << "oledwait";
                 auto evt = wait(inputChannel);
                 auto Message = inputChannel.read();
                 hwlib::cout << "oledread";
                 if(Message.Type == 'M'){
                     Wmessage.clear();
-                    MessageDisplay  << "\t0000" <<  Message.StringToWrite << hwlib::flush;
+                    hwlib::wait_ms(1);
+                    MessageDisplay  << "\t0000"; 
+                    hwlib::wait_ms(1);
+                    MessageDisplay <<  Message.StringToWrite;
+                    hwlib::wait_ms(1);
+                    MessageDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'N'){
                     Wname.clear();
@@ -85,7 +89,9 @@ void DisplayTaak::main(){
                     WeaponTDisplay  << "\t0000"<< Message.StringToWrite << hwlib::flush;
                 }
                 break;
-            
+            }   
+            default:
+                break;
         }
     }
 };

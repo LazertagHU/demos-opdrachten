@@ -27,7 +27,7 @@ void RunGameTaak::main()
         case state_t::IDLE:{
             display.showMessage("Game Setup", 'M') ;
             auto evt = wait(inputChannel + messageFlag);
-            hwlib::cout << "pressed";
+            //auto evt = wait(secondClock);
             if(evt == inputChannel)
             {
                 bnID = inputChannel.read();
@@ -481,11 +481,10 @@ bool RunGameTaak::isGameTimeMessage(uint32_t message){
 // };
 
 
-void RunGameTaak::sendMessage(uint32_t m){
+void RunGameTaak::SendMessage(uint32_t m){
     messagepool.write(m); messageFlag.set();
 }
 
-void RunGameTaak::InputMessage(buttonid id){
-    hwlib::cout << "iets";
+void RunGameTaak::InputMessage(buttonid id){}
     inputChannel.write(id);
 }

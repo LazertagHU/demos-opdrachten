@@ -62,7 +62,6 @@ void InputControlTaak::main(){
                     case '#':
                         Inputlistener->InputMessage(buttonid::hastagButton);
                         break;
-                        
                     default: 
                         break;
                         

@@ -25,8 +25,7 @@ void KeypadTaak::main(){
     for(;;){
         switch(KeypadState){
             case KeypadState_t::WAIT_FOR_INPUT:
-                KeyTimer.set(20000);
-                auto evt    = wait(KeyTimer);
+                wait(KeyClock);
                 Temp = Keypad.pressed();
                 if(Temp == '\0'){
                     break;

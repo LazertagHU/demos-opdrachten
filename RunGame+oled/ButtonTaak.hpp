@@ -10,14 +10,15 @@ enum class ButtonState_t        {WAIT_FOR_INPUT, PRESSED};
 class ButtonTaak : public rtos::task<>{
 private:
 
-    rtos::timer                                         ButtonTimer;
+    rtos::clock                                         ButtonClock;
     KeypadListener                                      *Keypadlistener;
     bool                                                buttonPressed = false;
+
     
 public:
     ButtonTaak(KeypadListener *Keypadlistener):
     task                ("ButtonTaak"),
-    ButtonTimer            (this, "ButtonTimer"),
+    ButtonClock(this, 100'000, "ButtonClock"),
     Keypadlistener      (Keypadlistener)
     {}
     
@@ -30,10 +31,7 @@ public:
             
             switch(ButtonState){
                 case ButtonState_t::WAIT_FOR_INPUT:
-                    ButtonTimer.set(100000);
-                    
-                    wait(ButtonTimer);
-                    hwlib::cout << "buttontimer";
+                    wait(ButtonClock);
                     if(!Button.read() && !buttonPressed ){
                         buttonPressed = true;
                         Keypadlistener->KeyPressed('E');
@@ -43,8 +41,7 @@ public:
                     break;
                     
                 case ButtonState_t::PRESSED:
-                    ButtonTimer.set(100000);
-                    wait(ButtonTimer);
+                    wait(ButtonClock);
                     if(Button.read()){
                         buttonPressed = false;
                         ButtonState = ButtonState_t::WAIT_FOR_INPUT;

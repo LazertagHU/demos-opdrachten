@@ -147,7 +147,7 @@ public:
         delayTimer(this, "delayTimer")
     {}
 
-    void sendMessage(uint32_t m ) override;
+    void SendMessage(uint32_t m ) override;
 
     void InputMessage(buttonid id)override;
 

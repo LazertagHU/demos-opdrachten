@@ -23,8 +23,8 @@ int main(){
     auto transfer           = TransferHitsControlTaak(playerpool);
     auto transmitter        = SendTask( "InputTask", led, lasersight, 500 );
     auto runGame            = RunGameTaak(display, transmitter, transfer, playerpool);   
-    auto decoder            = msg_decoder("decoder", runGame);
-    auto pause_detection    = pause_detector("pause_detector", ir_sensor, decoder);
+    //auto decoder            = msg_decoder("decoder", runGame);
+    //auto pause_detection    = pause_detector("pause_detector", ir_sensor, decoder);
     // auto input              = InputControlTaak(runGame);
 
     /* run rtos */
