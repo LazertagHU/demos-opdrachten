@@ -13,7 +13,7 @@ void RunGameTaak::main()
     uint32_t                shootCommand        = 15; // dit moet veranderd worden
     bool                    playerWeaponEntered = false;
     bool                    playerIDEntered     = false;
-    bool                    gameLeader          = false;
+    bool                    gameLeader          = true;
     bool                    gameTimeEntered     = false;
     //bool                    transferHitsAllowed = false;
     int                     countdown           = 0;
@@ -66,12 +66,12 @@ void RunGameTaak::main()
             break;
         }
         case state_t::WAIT_FOR_PLAYER_NUMBER:{
-            int input = waitForInput();
+            int input = waitForInput('N');
             if(input > 0 && input <= 15)
             {
-                auto player = playerpool.read();
-                player.SetPlayerID(input);
-                playerpool.write(player);
+                // auto player = playerpool.read();
+                // player.SetPlayerID(input);
+                // playerpool.write(player);
                 playerIDEntered = true;
                 
             }
@@ -83,18 +83,17 @@ void RunGameTaak::main()
             break;
         }
         case state_t::WAIT_FOR_WEAPON_NUMBER:{
-            int input = waitForInput();
-            if(input > 0 && input <= 15)
-            {
-                hwlib::cout << "1" << hwlib::endl;
-                auto player = playerpool.read();
-                hwlib::cout << "2" << hwlib::endl;
-                player.SetWeapon(input);
-                hwlib::cout << "3" << hwlib::endl;
-                playerpool.write(player);
-                hwlib::cout << '4' << hwlib::endl;
+            int input = waitForInput('A');
+            if(input > 0 && input <= 15){
+                // hwlib::cout << "1" << hwlib::endl;
+                auto tmp = playerpool.read();
+                // hwlib::cout << "2" << hwlib::endl;
+                tmp.SetWeapon(input);
+                // hwlib::cout << "3" << hwlib::endl;
+                playerpool.write(tmp);
+                // hwlib::cout << '4' << hwlib::endl;
                 playerWeaponEntered = true;
-                hwlib::cout << '5' << hwlib::endl;
+                // hwlib::cout << '5' << hwlib::endl;
             }
             else
             {
@@ -107,8 +106,8 @@ void RunGameTaak::main()
         }
         case state_t::ENTER_TIME_REMAINING:{
             command = 0;
-            int input = waitForInput();
-            if(input > 0 && input <= 15){
+            int input = waitForInput('T');
+            if(input > 0 && input <= 20){
                 command = calculateCheckSum(input);
                 currentState = state_t::SEND_COMMAND_STATE;
             }
@@ -117,6 +116,7 @@ void RunGameTaak::main()
 
         case state_t::SEND_COMMAND_STATE:{
             bnID = inputChannel.read();
+            display.showMessage("press # to send\ngame time", 'M');
             if(bnID == buttonid::hastagButton){
                 transmitter.SendMessage(command);
             }else if( bnID == buttonid::starButton){
@@ -146,6 +146,7 @@ void RunGameTaak::main()
                         display.showMessage("Starting game", 'M');
                         countdown = 10;
                         display.showMessage(countdown, 'T');
+                        currentState = state_t::AFTELLEN;
                     }
                 }
             
@@ -337,7 +338,7 @@ void RunGameTaak::computeStartCommand(int countdown, uint32_t & startCommand)
         startCommand = calculateCheckSum(startCommand);
 };
 
-int RunGameTaak::waitForInput()
+int RunGameTaak::waitForInput(char place)
 {
     int tens;
     int ones;
@@ -351,12 +352,12 @@ int RunGameTaak::waitForInput()
     {
         switch(state)
         {
-            case waitForInputStates::AWAIT_FIRST_CHARACTER:
+            case waitForInputStates::AWAIT_FIRST_CHARACTER:{
                 bnID = inputChannel.read();
                 if(bnID >= buttonid::zeroButton && bnID <= buttonid::nineButton)
                 {
                     tens = static_cast<int>(bnID);
-                    display.showMessage(tens, 'N');
+                    display.showMessage(tens, place);
                     state = waitForInputStates::AWAIT_SECOND_CHARACTER;
                 }
                 else if(bnID == buttonid::starButton)
@@ -364,13 +365,13 @@ int RunGameTaak::waitForInput()
                     state = waitForInputStates::END;
                 }
                 break;
-            
-            case waitForInputStates::AWAIT_SECOND_CHARACTER:
+            }
+            case waitForInputStates::AWAIT_SECOND_CHARACTER:{
                 bnID = inputChannel.read();
                 if(bnID >= buttonid::zeroButton && bnID <= buttonid::nineButton)
                 {
                     ones = static_cast<int>(bnID);
-                    display.showMessage((tens*10) + ones , 'N');
+                    display.showMessage((tens*10) + ones , place);
                     state = waitForInputStates::END;
                     returnval = (tens*10) + ones;
                 }
@@ -381,10 +382,11 @@ int RunGameTaak::waitForInput()
                     state = waitForInputStates::END;
                 }
                 break;
-            case waitForInputStates::END:
-                loop = false;
+            }
+            case waitForInputStates::END:{
                 return returnval;
                 break;
+            }
             default:
                 break;
         }

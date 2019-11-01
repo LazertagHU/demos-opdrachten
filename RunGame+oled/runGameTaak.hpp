@@ -85,7 +85,7 @@ private:
     * or when one number is entered. this way the user can return
     * 1 - 9 and then return out of the function.
     */
-    int waitForInput();
+    int waitForInput(char place);
    
     /*
     * This function calculates the checksum of a specific command.
