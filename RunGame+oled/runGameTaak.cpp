@@ -180,7 +180,7 @@ void RunGameTaak::main()
                         auto player = playerpool.read();
                         auto damage = computeHit(msg);
                         player.SetHealth((player.GetHealth() - damage));   // set lives
-                        player.AddHit(getEnemyID(msg) ,damage, remainingGameTime);
+                        transfer.AddHit(getEnemyID(msg) ,damage, remainingGameTime);
                         display.showMessage(player.GetHealth(), 'H');
                         playerpool.write(player);
                         delay = computeDeathDelay(msg);

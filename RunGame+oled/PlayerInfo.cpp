@@ -21,15 +21,15 @@ void PlayerInfo::SetPlayerID( unsigned int NewPlayerID ){
     PlayerID = NewPlayerID; 
 }
 
-hit* PlayerInfo::GetHits(){ 
-    return hits; 
-}
+//hit* PlayerInfo::GetHits(){ 
+//    return hits; 
+//}
 
-void PlayerInfo::AddHit( int EnemyID, int Damage, int Time ){
-    hit newHit{ EnemyID, Damage, Time };
-    hits[hitAmount] = newHit;
-    hitAmount++;
-}
+//void PlayerInfo::AddHit( int EnemyID, int Damage, int Time ){
+//    hit newHit{ EnemyID, Damage, Time };
+//    hits[hitAmount] = newHit;
+//    hitAmount++;
+//}
 
 void PlayerInfo::SetHealth( int NewHealth ){ 
     health = NewHealth; 
@@ -39,6 +39,6 @@ int PlayerInfo::GetHealth(){
     return health; 
 }
 
-int PlayerInfo::GethitAmount(){ 
-    return hitAmount; 
-}
+//int PlayerInfo::GethitAmount(){ 
+//    return hitAmount; 
+//}

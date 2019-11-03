@@ -16,12 +16,10 @@ void TransferHitsControlTaak::main(){
             // break;
                 PlayerInfo player = entity_pool.read();
                 int playerID = player.GetPlayerID();
-                auto hits = player.GetHits();
-                int hitNumber = player.GethitAmount();
                 
                 hwlib::cout << "PlayerID: " << playerID << "\n";
-                if( hitNumber != 0 ){
-                    for( unsigned int i = hitNumber; i > 0; i-- ){
+                if( hitAmount != 0 ){
+                    for( unsigned int i = hitAmount; i > 0; i-- ){
                         hwlib::cout << "Enemy: " << hits[i-1].EnemyID << ", Damage: " << hits[i-1].Damage << ", Time: " << hits[i-1].Time << "\n";
                     }
                 }else{
@@ -31,4 +29,12 @@ void TransferHitsControlTaak::main(){
         }
     }
 
+}
+
+void TransferHitsControlTaak::AddHit( int EnemyID, int Damage, int Time ){
+    hit newHit{ EnemyID, Damage, Time };
+    if( hitAmount < 100 ){
+        hits[hitAmount] = newHit;
+        hitAmount++;
+    }
 }
