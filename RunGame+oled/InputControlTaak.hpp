@@ -18,7 +18,7 @@ private:
 
 public:
     InputControlTaak(InputListener *Inputlistener):
-    task                ("KeypadTaak"),
+    task                (5, "InputControlTaak"),
     Inputlistener       (Inputlistener),
     InputChannel        (this, "InputChannel"),
     Keypadtaak          (this),

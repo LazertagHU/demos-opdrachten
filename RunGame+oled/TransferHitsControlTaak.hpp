@@ -17,7 +17,7 @@ private:
       
 public:
     TransferHitsControlTaak( rtos::pool< PlayerInfo > & entity_pool ):
-        task( "TransferHitsControlTaak" ),
+        task( 8, "TransferHitsControlTaak" ),
         TransferEnableFlag( this, "TransferEnableFlag" ),
 	    entity_pool( entity_pool )
     {

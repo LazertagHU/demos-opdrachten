@@ -14,7 +14,7 @@ private:
     
 public:
     ButtonTaak(KeypadListener *Keypadlistener):
-    task                ("ButtonTaak"),
+    task                (3, "ButtonTaak"),
     ButtonClock(this, 100'000, "ButtonClock"),
     Keypadlistener      (Keypadlistener)
     {}

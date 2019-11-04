@@ -59,7 +59,7 @@ private:                                                                        
 public:                                                                             //////////////////////////////////////////////////////////////                
                                                                                     //
     DisplayTaak():                                                                  //- CLASS CONSTRUCTOR
-    task                ("DisplayTaak"),                                            //- creeer de rtos::task
+    task                (2, "DisplayTaak"),                                            //- creeer de rtos::task
     inputChannel        (this, "inputChannel")                                      //- creeer de rtos::Channel
     {}                                                                              //
                                                                                     //////////////////////////////////////////////////////////////

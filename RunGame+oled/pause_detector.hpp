@@ -20,7 +20,7 @@ public:
         hwlib::pin_in & irsensor,
         pause_listener & listener
     ):
-        task( name ),
+        task( 0, name ),
         irsensor( irsensor ),
         listener(listener),
         interval_clock( this, 100, "interval_clock")

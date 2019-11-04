@@ -110,6 +110,8 @@ private:
     */
     int computeDeathDelay(uint32_t message);
 
+    void computeShootCommand(uint32_t & shootcommand);
+
 
     int computeShootDelay();
 
@@ -137,7 +139,7 @@ public:
         TransferHitsControlTaak& transfer,
         rtos::pool<PlayerInfo> & playerpool
     ):
-        task("runGameTaak"),
+        task(6, "runGameTaak"),
         display(display),
         transmitter(transmitter),
         transfer(transfer),

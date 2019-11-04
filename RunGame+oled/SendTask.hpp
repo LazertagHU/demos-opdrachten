@@ -20,7 +20,7 @@ private:
     
 public:
     SendTask( const char * name, hwlib::target::d2_36kHz led, hwlib::target::pin_out laser, int weapondelay ):
-        task( name ),
+        task( 7, name ),
         led( led ),
         laser( laser ),
         weapondelay( weapondelay ),
