@@ -62,14 +62,14 @@ void DisplayTaak::main(){
                     hwlib::wait_ms(10); Wmessage.clear();
                     hwlib::wait_ms(10); MessageDisplay  << "\t0000"; 
                     hwlib::wait_ms(10);MessageDisplay <<  Message.StringToWrite;
-                    hwlib::wait_ms(10); MessageDisplay << hwlib::flush;
+                    hwlib::wait_ms(10); Wmessage.flush();
                 }
                 else if(Message.Type == 'N'){
                     hwlib::wait_ms(10); Wname.clear();
                     hwlib::wait_ms(10); NameDisplay << "\t0000";
                     hwlib::wait_ms(10); NameDisplay << "#";
                     hwlib::wait_ms(10); NameDisplay << Message.IntToWrite;
-                    hwlib::wait_ms(10); NameDisplay <<hwlib::flush;
+                    hwlib::wait_ms(10); NameDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'A'){
                     hwlib::wait_ms(10); Wammo.clear();
@@ -88,7 +88,7 @@ void DisplayTaak::main(){
                     hwlib::wait_ms(10); Wtime.clear();
                     hwlib::wait_ms(10); TimeDisplay     << "\t0000";
                     hwlib::wait_ms(10); TimeDisplay << Message.IntToWrite;
-                    hwlib::wait_ms(10); TimeDisplay <<  hwlib::flush;
+                    hwlib::wait_ms(10); TimeDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'G'){
                     hwlib::wait_ms(10); WweaponT.clear();
