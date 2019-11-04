@@ -13,20 +13,46 @@ private:
     //hit hits[10]; // 100 breekt alles, 50 breek het op een andere manier. 10 werkt volledig
     int health;
     int hitAmount;
+    
 public:
+    /// \brief
+    /// The default constructor for the PlayerInfo entity.
+    /// \details
+    /// Sets starting amounts of health and hitAmount. During the game this entity saves all player info
     PlayerInfo(){
         health = 100;
         hitAmount = 0;
     }
-
+    
+    /// \brief
+    /// Returns the n weapon 
     weapon GetWeapon(int n);
+
+    /// \brief
+    /// Returns the current weapon
     int GetCurrentWeapon();
+
+    /// \brief
+    /// Sets the current weapon to n
     void SetWeapon(int n);
+
+    /// \brief
+    /// Returns the current PlayerID.
     unsigned int GetPlayerID();
+
+    /// \brief
+    /// Sets the player ID to NewPlayerID
     void SetPlayerID( unsigned int NewPlayerID );
+
     //hit* GetHits();
     //void AddHit( int EnemyID, int Damage, int Time );
+
+    /// \brief
+    /// Set the current health to NewHealt
     void SetHealth( int NewHealth );
+
+    /// \brief
+    /// Returns the current healt
     int GetHealth();
     //int GethitAmount();
 };
