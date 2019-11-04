@@ -26,7 +26,7 @@ void PlayerInfo::SetPlayerID( unsigned int NewPlayerID ){
 //}
 
 //void PlayerInfo::AddHit( int EnemyID, int Damage, int Time ){
-//    hit newHit{ EnemyID, Damage, Time };
+//    hit newHit{ EnemyID, Damage, Time }; //not safe, out of [] index danger
 //    hits[hitAmount] = newHit;
 //    hitAmount++;
 //}

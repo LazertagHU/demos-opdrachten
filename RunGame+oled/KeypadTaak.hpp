@@ -14,18 +14,23 @@ private:
     char                                                Key  = '\0';
     KeypadListener                                      *Keypadlistener;
     
-
+    /// \brief
+    /// Main() for the Keypad task.
+    /// \details
+    /// uses the hwlib::keypad to read the keypad buttons on a 100ms interval.
+    /// It uses its listener to send the pressed button.
+    void main() override;
     
 public:
+    /// \brief
+    /// Default constructor for the KeypadTaak
+    /// \details
+    /// Names the task, starts a 100ms clock and binds the listener
     KeypadTaak(KeypadListener *Keypadlistener):
     task                (4, "KeypadTaak"),
     KeyClock(this, 100'000, "KeyClock"),
-    Keypadlistener      (Keypadlistener)
-    {
-        
-    }
-    
-    void main();
+    Keypadlistener(Keypadlistener)
+    {}
 };
 
 

@@ -143,7 +143,9 @@ void RunGameTaak::main()
                     if(countdown > 1){
                         countdown--;
                         computeStartCommand(countdown, startCommand);
-                        display.showMessage(countdown, 'T');
+                        if( countdown % 5 == 0 ){
+                            display.showMessage(countdown, 'T');
+                        }
                     }else{
                         display.showMessage("Starting game", 'M');
                         countdown = 10;
@@ -205,7 +207,10 @@ void RunGameTaak::main()
                 {
                     if( remainingGameTime > 0 )
                     {
-                        display.showMessage(--remainingGameTime, 'T');
+                        if( remainingGameTime%60 == 0 ){
+                            display.showMessage(remainingGameTime/60, 'T');
+                        }
+                        --remainingGameTime;
                     }
                     else
                     {
@@ -257,7 +262,7 @@ void RunGameTaak::main()
                     if( remainingGameTime > 0 )
                     {
                         remainingGameTime--;
-                        display.showMessage(remainingGameTime, 'T');
+                    //    display.showMessage(remainingGameTime, 'T');
                     }
                     else
                     {
@@ -282,7 +287,7 @@ void RunGameTaak::main()
                     if( remainingGameTime > 0 )
                     {
                         remainingGameTime--;
-                        display.showMessage(remainingGameTime, 'T');
+                        //display.showMessage(remainingGameTime, 'T');
                     }
                     else
                     {
