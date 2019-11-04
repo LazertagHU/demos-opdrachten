@@ -15,7 +15,7 @@ private:
     int weapondelay;
     rtos::flag SendFlag;
     rtos::pool<uint32_t> sendpool;
-    
+    rtos::mutex send_mutex;
     void main() override;
     
 public:
@@ -26,7 +26,7 @@ public:
         weapondelay( weapondelay ),
         SendFlag( this, "SendFlag" ),
         sendpool( "sendpool" )
-    {}
+        {}
 
     void SendMessage( uint32_t CommandID );
 };

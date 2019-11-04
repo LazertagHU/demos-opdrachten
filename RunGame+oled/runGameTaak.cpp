@@ -10,7 +10,7 @@ void RunGameTaak::main()
     uint32_t                startCommand        = 0b1'00000'10000'00000'1'00000'10000'00000;
     uint32_t                setTimeCommand      = 0b1'00000'00000'00000'1'00000'00000'00000;
     uint32_t                msg;
-    uint32_t                shootCommand        = 15; // dit moet veranderd worden
+    uint32_t                shootCommand        = 0b1'00100'00010'00110'1'00100'00010'00110; // dit moet veranderd worden
     bool                    playerWeaponEntered = false;
     bool                    playerIDEntered     = false;
     bool                    gameLeader          = true;
@@ -141,7 +141,9 @@ void RunGameTaak::main()
                     if(countdown > 1){
                         countdown--;
                         computeStartCommand(countdown, startCommand);
-                        display.showMessage(countdown, 'T');
+                        if( countdown % 5 == 0 ){
+                            display.showMessage(countdown, 'T');
+                        }
                     }else{
                         display.showMessage("Starting game", 'M');
                         countdown = 10;
@@ -202,7 +204,10 @@ void RunGameTaak::main()
                 {
                     if( remainingGameTime > 0 )
                     {
-                        display.showMessage(--remainingGameTime, 'T');
+                        if( remainingGameTime%60 == 0 ){
+                            display.showMessage(remainingGameTime/60, 'T');
+                        }
+                        --remainingGameTime;
                     }
                     else
                     {
@@ -254,7 +259,7 @@ void RunGameTaak::main()
                     if( remainingGameTime > 0 )
                     {
                         remainingGameTime--;
-                        display.showMessage(remainingGameTime, 'T');
+                    //    display.showMessage(remainingGameTime, 'T');
                     }
                     else
                     {
@@ -279,7 +284,7 @@ void RunGameTaak::main()
                     if( remainingGameTime > 0 )
                     {
                         remainingGameTime--;
-                        display.showMessage(remainingGameTime, 'T');
+                        //display.showMessage(remainingGameTime, 'T');
                     }
                     else
                     {
