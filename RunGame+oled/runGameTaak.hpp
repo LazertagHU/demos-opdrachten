@@ -42,77 +42,90 @@ private:
     rtos::timer                 delayTimer;
     buttonid                    bnID;
 
-    /*
-    * Main function of this task
-    * This task controls the game setup and the game whilst it's running
-    * 
-    * It's code is based on the runGameTaak std and can be found in the
-    * google drive map.
-    */
+    /// \brief
+    /// The main() of the RunGame task.
+    /// \details
+    /// This task controls the game setup and the game whilst it's running
+    /// It's code is based on the runGameTaak std and can be found in the
+    /// google drive map.
+
     void main() override;
 
-    /*
-    * The game leader can send a specific command which states the length
-    * of the upcoming game.
-    * This function decodes that command and returns the gametime. 
-    */
+    /// \brief
+    /// Returns the decoded game time.
+    /// \details
+    /// The game leader can send a specific command which states the length
+    /// of the upcoming game.
+    /// This function decodes that command and returns the gametime. 
     uint32_t computeGameTime(uint32_t msg);
 
-    /*
-    * The game leader can send a specific command which tells the player 
-    * in how many seconds the game is going to start. This way, every
-    * player starts at about the same time.
-    * 
-    * This function decodes that message and translates it in to the proper
-    * countdown.
-    */
+    /// \brief
+    /// Returns the decoded countdown.
+    /// \details
+    /// The game leader can send a specific command which tells the player 
+    /// in how many seconds the game is going to start. This way, every
+    /// player starts at about the same time.
+    /// 
+    /// This function decodes that message and translates it in to the proper
+    /// countdown.
+    ///
     uint32_t computeCountdown(uint32_t msg);
 
-    /*
-    * The game leader can send a specific command which tells the player 
-    * in how many seconds the game is going to start. This way, every
-    * player starts at about the same time.
-    * 
-    * This function calculates the specific command that needs to be send 
-    * by the game leader at a specific countdown timer.
-    * 
-    */
+    /// \brief
+    /// Modifies startCommand to the correct start countdown
+    /// \details
+    /// The game leader can send a specific command which tells the player 
+    /// in how many seconds the game is going to start. This way, every
+    /// player starts at about the same time.
+    /// 
+    /// This function calculates the specific command that needs to be send 
+    /// by the game leader at a specific countdown timer.
     void computeStartCommand(uint32_t countdown, uint32_t &startCommand);
 
-    /*
-    * This function adds two inputs of the keypad together.
-    * The user has the option to return when no numbers are entered
-    * or when one number is entered. this way the user can return
-    * 1 - 9 and then return out of the function.
-    */
+    /// \brief
+    /// Returns pressed chars on keypad.
+    /// \details
+    /// This function adds two inputs of the keypad together.
+    /// The user has the option to return when no numbers are entered
+    /// or when one number is entered. this way the user can return
+    /// 1 - 9 and then return out of the function.
+    ///
     int waitForInput(char place);
    
-    /*
-    * This function calculates the checksum of a specific command.
-    * This is done by XOR-ing specific bits
-    */
+    /// \brief
+    /// Returns XOR checksum
+    /// \details
+    /// This function calculates the checksum of a specific command.
+    /// This is done by XOR-ing specific bits
     uint32_t calculateCheckSum(uint32_t input);
 
-    /*
-    * This function is used to decide wether te player is hit
-    */
+    /// \brief
+    /// This function is used to decide wether te player is hit
     bool isHitMessage(uint32_t message);
     
-    /*
-    * This function is used to calculate the hit damage when a
-    * player is hit
-    */
+    /// \brief
+    /// Returns damage taken.
+    /// \details
+    /// This function is used to calculate the hit damage when a
+    /// player is hit
     int computeHit(uint32_t message);
 
-    /*
-    * This function is used to calculate the delay that a player
-    * can't shoot or be shot after he has been shot by another player
-    */
+    /// \brief
+    /// Returns after hit timeout.
+    /// \details
+    /// This function is used to calculate the delay that a player
+    /// can't shoot or be shot after he has been shot by another player
     int computeDeathDelay(uint32_t message);
+
 
     void computeShootCommand(uint32_t & shootcommand);
 
 
+    /// \brief
+    /// Returns after shot timeout.
+    /// \details
+    /// This function is used to calculate the delay that a player
+    /// can't shootafter he has shot by another player
     int computeShootDelay();
 
     /*

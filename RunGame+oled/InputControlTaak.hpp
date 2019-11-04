@@ -16,6 +16,12 @@ private:
     KeypadTaak                                          Keypadtaak;
     ButtonTaak                                          Buttontaak;
 
+     /// \brief
+    /// Main() for the Input Control task.
+    /// \details
+    /// this task waits on the channel for new presses, decodes them and sends them on to the listener
+    void main();
+
 public:
     /// \brief
     /// Default constructor for the InputControlTaak
@@ -33,12 +39,6 @@ public:
     /// \details    
     /// Public function to write the pressed key to. This function internally uses a channel as waitable to save this incoming data.                                                                                
     void KeyPressed(char Key){InputChannel.write(Key);};
-
-    /// \brief
-    /// Main() for the Input Control task.
-    /// \details
-    /// this task waits on the channel for new presses, decodes them and sends them on to the listener
-    void main();
 };
 
 
