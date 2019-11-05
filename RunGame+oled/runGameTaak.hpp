@@ -125,27 +125,27 @@ private:
     /// Returns after shot timeout.
     /// \details
     /// This function is used to calculate the delay that a player
-    /// can't shootafter he has shot by another player
+    /// can't shoot after he has shot
     int computeShootDelay();
 
-    /*
-    * This function checks if the message received is a start message;
-    */
+    /// \brief
+    /// This function checks if the message received is a start message;
     bool isStartMessage(uint32_t message);
 
-    /*
-    * This function checks if the message received contains the game time;
-    */
+    /// \brief
+    /// This function checks if the message received contains the game time;
     bool isGameTimeMessage(uint32_t message);
 
-
+    /// \brief
+    /// Extracts and returns the enemyID from message.
     uint32_t getEnemyID(uint32_t message);
     
 
 public:
-    /*
-    * Constructor of RunGameTaak
-    */
+    /// \brief
+    /// The default constructor of RunGameTaak
+    /// \details
+    /// Names its task, binds all given paramaters, inits own objects and starts its 1s clock.
     RunGameTaak(
         DisplayTaak & display, 
         SendTask& transmitter,
@@ -165,8 +165,16 @@ public:
         delayTimer(this, "delayTimer")
     {}
 
+    /// \brief
+    /// Interface for writing recieved messages
+    /// \details    
+    /// Public function to write the recieved message to. This function internally uses a pool and a flag to save this incoming data.  
     void sendMessage(uint32_t m ) override;
 
+    /// \brief
+    /// Interface for writing recieved commands
+    /// \details    
+    /// Public function to write commands to. This function internally uses a channel as waitable to save this incoming data.  
     void InputMessage(buttonid id)override;
 
 };
