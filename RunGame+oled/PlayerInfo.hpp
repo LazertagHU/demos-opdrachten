@@ -8,8 +8,8 @@
 class PlayerInfo {
 private:
     unsigned int PlayerID;
-    std::array<weapon, 10> weapons{weapon{"pistol", 25, 4'000'000, 1'000'000}, weapon{"sniper", 10, 10'000'000, 5'000'000}};
-    int currentWeapon;
+    std::array<weapon, 10> weapons{weapon{"pistol", 25, 4'000'000, 1'000'000}, weapon{"sniper", 10, 10'000'000, 50'000}};
+    unsigned int currentWeapon;
     //hit hits[10]; // 100 breekt alles, 50 breek het op een andere manier. 10 werkt volledig
     int health;
     int hitAmount;
@@ -27,10 +27,11 @@ public:
     /// \brief
     /// Returns the n weapon 
     weapon GetWeapon(int n);
+    
 
     /// \brief
     /// Returns the current weapon
-    int GetCurrentWeapon();
+    unsigned int GetCurrentWeapon();
 
     /// \brief
     /// Sets the current weapon to n

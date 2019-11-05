@@ -25,7 +25,7 @@ public:
     /// \details
     /// This constructor names its task, starts its clock and binds the listener.
     ButtonTaak(KeypadListener *Keypadlistener):
-    task                ("ButtonTaak"),
+    task                (3, "ButtonTaak"),
     ButtonClock(this, 100'000, "ButtonClock"),
     Keypadlistener      (Keypadlistener)
     {}

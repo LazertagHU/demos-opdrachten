@@ -10,7 +10,11 @@
 
 # settings for Arduino Due projects
 TARGET            ?= arduino_due
+<<<<<<< HEAD
+SERIAL_PORT       ?= /dev/ttyUSB0
+=======
 SERIAL_PORT       ?= /dev/ttyACM1
+>>>>>>> 25f8ff14f66bac048406cc8e5526228b00701e90
 CONSOLE_BAUDRATE  ?= 2400
 STACK_SIZE        ?= 81920
 HEAP              ?= BMPTK

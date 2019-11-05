@@ -27,7 +27,7 @@ public:
     /// \details
     /// Names the task, starts a 100ms clock and binds the listener
     KeypadTaak(KeypadListener *Keypadlistener):
-    task("KeypadTaak"),
+    task                (4, "KeypadTaak"),
     KeyClock(this, 100'000, "KeyClock"),
     Keypadlistener(Keypadlistener)
     {}

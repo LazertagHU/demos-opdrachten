@@ -5,7 +5,7 @@ weapon PlayerInfo::GetWeapon(int n){
     return weapons[n-1]; 
 }
 
-int PlayerInfo::GetCurrentWeapon(){ 
+unsigned int PlayerInfo::GetCurrentWeapon(){ 
     return currentWeapon;
 }
 

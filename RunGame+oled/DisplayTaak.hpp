@@ -62,7 +62,7 @@ public:                                                                         
     /// \details    
     /// Constructs display task with a name and a channel for messages to be displayed
     DisplayTaak():                                                                  //- CLASS CONSTRUCTOR
-    task                ("DisplayTaak"),                                            //- creeer de rtos::task
+    task                (2, "DisplayTaak"),                                            //- creeer de rtos::task
     inputChannel        (this, "inputChannel")                                      //- creeer de rtos::Channel
     {}                                                                              //
                                                                                     //////////////////////////////////////////////////////////////

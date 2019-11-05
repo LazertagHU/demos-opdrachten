@@ -28,7 +28,7 @@ public:
         const char * name,
         msg_listener & listener
     ):
-        task( name ),
+        task( 1, name ),
         listener(listener),
         pauses(this, "pauses"),
         reset_timer(this, "reset_timer")
