@@ -20,7 +20,7 @@ void SendTask::main(){
                 i = 31;
                 message = sendpool.read();
                 bit = (message >> i) & 1;
-                //laser.write(1);
+                // laser.write(1);
                 if( bit == 1 ){
                     state = states::SENDHIGH1;
                 }else{
@@ -49,7 +49,7 @@ void SendTask::main(){
                     led.write(1);
                     hwlib::wait_ms( 1 );
                     led.write(0);
-                    // hwlib::wait_ms( weapondelay );
+                    // hwlib::wait_ms( laserDelay );
                     // laser.write(0);
                     state = states::IDLE;
                     break;
@@ -83,7 +83,7 @@ void SendTask::main(){
                     led.write(1);
                     hwlib::wait_ms( 1);
                     led.write(0);
-                    // hwlib::wait_ms( weapondelay );
+                    // hwlib::wait_ms( laserDelay );
                     // laser.write(0);
                     state = states::IDLE;
                     break;

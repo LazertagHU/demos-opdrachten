@@ -5,20 +5,28 @@ void RunGameTaak::main()
 {
     state_t                 currentState        = state_t::IDLE;
     substates_runGame_t     currentSubState     = substates_runGame_t::ALIVE;
-    uint32_t                command;    
+    uint32_t                command             = 0b1'00000'10000'00000'1'00000'10000'00000;
     //uint32_t                debugCommand        = 0b1'01111'00101'00000; // 0b1'01111'00101'01010
     uint32_t                startCommand        = 0b1'00000'10000'00000'1'00000'10000'00000;
     uint32_t                setTimeCommand      = 0b1'00000'00000'00000'1'00000'00000'00000;
     uint32_t                msg;
-    uint32_t                shootCommand        = 15; // dit moet veranderd worden
+    uint32_t                shootCommand        = 0b1'00000'00000'00000'1'00000'00000'00000; // dit moet veranderd worden
     bool                    playerWeaponEntered = false;
     bool                    playerIDEntered     = false;
-    bool                    gameLeader          = true;
+    bool                    gameLeader          = false;
     bool                    gameTimeEntered     = false;
     //bool                    transferHitsAllowed = false;
     int                     countdown           = 0;
     int                     remainingGameTime   = 0;
     int                     delay               = 0;
+
+    if(gameLeader == true){
+        display.showMessage(0,'N');
+        auto player = playerpool.read();
+        player.SetPlayerID(0);
+        playerpool.write(player);
+        playerIDEntered = true;
+    }
 
     for(;;)
     {
@@ -33,10 +41,9 @@ void RunGameTaak::main()
                 if(bnID == buttonid::cButton && playerWeaponEntered == true && gameLeader == true)
                 {
                     display.showMessage("Enter Game\nTime", 'M');
-                    command = 0;
                     currentState = state_t::ENTER_TIME_REMAINING;
                 }
-                else if(bnID == buttonid::bButton)
+                else if(bnID == buttonid::bButton && gameLeader == false)
                 {
                     display.showMessage("Choose weapon", 'M');
                     currentState = state_t::WAIT_FOR_WEAPON_NUMBER;
@@ -52,7 +59,7 @@ void RunGameTaak::main()
                 if(isGameTimeMessage(msg)) // gametime
                 {
                     remainingGameTime   = 60*computeGameTime(msg); //----------
-                    display.showMessage(remainingGameTime, 'T');
+                    display.showMessage(remainingGameTime/60, 'T');
                     gameTimeEntered     = true;
                 }
                 else if (isStartMessage(msg) && gameTimeEntered == true && playerIDEntered == true && playerWeaponEntered == true)
@@ -106,6 +113,7 @@ void RunGameTaak::main()
                 setTimeCommand |= (input << 21);
                 setTimeCommand = calculateCheckSum(setTimeCommand);
                 currentState = state_t::SEND_COMMAND_STATE;
+               
                 display.showMessage("press # to send\ngame time", 'M');
             }else{
                 display.showMessage("Game Time too high", 'M');
@@ -118,7 +126,7 @@ void RunGameTaak::main()
         case state_t::SEND_COMMAND_STATE:{
             bnID = inputChannel.read();
             if(bnID == buttonid::hastagButton){
-                transmitter.SendMessage(command);
+                transmitter.SendMessage(setTimeCommand);
             }else if( bnID == buttonid::starButton){
                 countdown = 30;
                 display.showMessage("press * to send start command", 'M');
@@ -140,8 +148,10 @@ void RunGameTaak::main()
                 }else if(evt == secondClock){
                     if(countdown > 1){
                         countdown--;
-                        computeStartCommand(countdown, startCommand);
-                        display.showMessage(countdown, 'T');
+                        startCommand = computeStartCommand(countdown, command);
+                        if( countdown % 5 == 0 ){
+                            display.showMessage(countdown, 'T');
+                        }
                     }else{
                         display.showMessage("Starting game", 'M');
                         countdown = 10;
@@ -163,6 +173,7 @@ void RunGameTaak::main()
                 playerpool.write(player);
                 display.showMessage(playerpool.read().GetHealth(), 'H');
                 display.showMessage("Alive", 'M');
+                computeShootCommand(shootCommand);
                 currentState = state_t::RUNGAME;
             }
             break;
@@ -202,7 +213,10 @@ void RunGameTaak::main()
                 {
                     if( remainingGameTime > 0 )
                     {
-                        display.showMessage(--remainingGameTime, 'T');
+                        if( remainingGameTime%60 == 0 ){
+                            display.showMessage(remainingGameTime/60, 'T');
+                        }
+                        --remainingGameTime;
                     }
                     else
                     {
@@ -254,7 +268,7 @@ void RunGameTaak::main()
                     if( remainingGameTime > 0 )
                     {
                         remainingGameTime--;
-                        display.showMessage(remainingGameTime, 'T');
+                    //    display.showMessage(remainingGameTime, 'T');
                     }
                     else
                     {
@@ -279,7 +293,7 @@ void RunGameTaak::main()
                     if( remainingGameTime > 0 )
                     {
                         remainingGameTime--;
-                        display.showMessage(remainingGameTime, 'T');
+                        //display.showMessage(remainingGameTime, 'T');
                     }
                     else
                     {
@@ -324,7 +338,19 @@ uint32_t RunGameTaak::computeCountdown(uint32_t msg)
     return msg*2;
 };
 
-void RunGameTaak::computeStartCommand(uint32_t countdown, uint32_t & startCommand)
+void RunGameTaak::computeShootCommand(uint32_t & shootcommand){
+    auto id     = playerpool.read().GetPlayerID();
+    auto wepid  = playerpool.read().GetCurrentWeapon();
+    
+    shootcommand |= (id << 26);
+    shootcommand |= (id << 10);
+    shootcommand |= (wepid << 5);
+    shootcommand |= (wepid << 21);
+
+    shootcommand = calculateCheckSum(shootcommand);
+}
+
+uint32_t RunGameTaak::computeStartCommand(uint32_t countdown, uint32_t command)
 {
         /* 
         This function calculates the startcommand that can be send to players. 
@@ -335,11 +361,13 @@ void RunGameTaak::computeStartCommand(uint32_t countdown, uint32_t & startComman
         Where nnnn is the remaining countdown devided by 2. So that means a countdown of 30 will result in 1-00000-11111
         the control bits are calculated afterwards
         */
-
+      
         countdown/=2;
-        startCommand^= (countdown << 5 );
-        startCommand^= (countdown << 21);
-        startCommand = calculateCheckSum(startCommand);
+        command|= (countdown << 5 );
+        command|= (countdown << 21);
+        auto x = calculateCheckSum(command);
+
+        return x;
 };
 
 int RunGameTaak::waitForInput(char place)

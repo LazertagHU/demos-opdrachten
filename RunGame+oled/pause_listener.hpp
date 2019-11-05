@@ -3,6 +3,8 @@
 
 class pause_listener {
 public:
+    /// \brief
+    /// Purely virtual and abstract class used for the listener patern.
     virtual void pause_detected( int n ) = 0;
 };
 

@@ -62,39 +62,69 @@ void DisplayTaak::main(){
                     hwlib::wait_us(10); Wmessage.clear();
                     hwlib::wait_us(10); MessageDisplay  << "\t0000"; 
                     hwlib::wait_us(10);MessageDisplay <<  Message.StringToWrite;
+<<<<<<< HEAD
                     hwlib::wait_us(10); MessageDisplay << hwlib::flush;
+=======
+                    hwlib::wait_us(10); //MessageDisplay; 
+                    MessageDisplay.flush();
+>>>>>>> 25f8ff14f66bac048406cc8e5526228b00701e90
                 }
                 else if(Message.Type == 'N'){
                     hwlib::wait_us(10); Wname.clear();
                     hwlib::wait_us(10); NameDisplay << "\t0000";
                     hwlib::wait_us(10); NameDisplay << "#";
                     hwlib::wait_us(10); NameDisplay << Message.IntToWrite;
+<<<<<<< HEAD
                     hwlib::wait_us(10); NameDisplay <<hwlib::flush;
+=======
+                    hwlib::wait_us(10); NameDisplay << hwlib::flush;
+                    NameDisplay.flush();
+>>>>>>> 25f8ff14f66bac048406cc8e5526228b00701e90
                 }
                 else if(Message.Type == 'A'){
                     hwlib::wait_us(10); Wammo.clear();
                     hwlib::wait_us(10); AmmoDisplay << "\t0000";
                     hwlib::wait_us(10); AmmoDisplay << Message.IntToWrite;
+<<<<<<< HEAD
                     hwlib::wait_us(10); AmmoDisplay << hwlib::flush;
+=======
+                    hwlib::wait_us(10);// AmmoDisplay;// << hwlib::flush;
+                    AmmoDisplay.flush();
+>>>>>>> 25f8ff14f66bac048406cc8e5526228b00701e90
                 }
                 else if(Message.Type == 'H'){
                     hwlib::wait_us(10); Whealth.clear();
                     hwlib::wait_us(10); HealthDisplay   << "\t0000";
                     hwlib::wait_us(10); HealthDisplay << "HP: ";
                     hwlib::wait_us(10); HealthDisplay << Message.IntToWrite;
+<<<<<<< HEAD
                     hwlib::wait_us(10); HealthDisplay << hwlib::flush;
+=======
+                    hwlib::wait_us(10);// HealthDisplay;// << hwlib::flush;
+                    HealthDisplay.flush();
+>>>>>>> 25f8ff14f66bac048406cc8e5526228b00701e90
                 }
                 else if(Message.Type == 'T'){
                     hwlib::wait_us(10); Wtime.clear();
                     hwlib::wait_us(10); TimeDisplay     << "\t0000";
                     hwlib::wait_us(10); TimeDisplay << Message.IntToWrite;
+<<<<<<< HEAD
                     hwlib::wait_us(10); TimeDisplay <<  hwlib::flush;
+=======
+                    hwlib::wait_us(10); //TimeDisplay;// <<  hwlib::flush;
+                    TimeDisplay.flush();
+>>>>>>> 25f8ff14f66bac048406cc8e5526228b00701e90
                 }
                 else if(Message.Type == 'G'){
                     hwlib::wait_us(10); WweaponT.clear();
                     hwlib::wait_us(10); WeaponTDisplay << "\t0000"; 
                     hwlib::wait_us(10); WeaponTDisplay << Message.StringToWrite; 
+<<<<<<< HEAD
                     hwlib::wait_us(10); WeaponTDisplay << hwlib::flush;
+=======
+                    hwlib::wait_us(10);// WeaponTDisplay;// << hwlib::flush;
+                    WeaponTDisplay.flush();
+>>>>>>> 25f8ff14f66bac048406cc8e5526228b00701e90
                 }
                 break;
             }   

@@ -16,7 +16,8 @@ private:
 
     
 public:
-    
+    /// \brief
+    /// Purely virtual and abstract class used for the listener patern.
     virtual void InputMessage(buttonid id) = 0;
 
 };

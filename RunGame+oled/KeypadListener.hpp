@@ -8,8 +8,9 @@ private:
 
     
 public:
-    
-    virtual void KeyPressed(char Key);
+    /// \brief
+    /// Purely virtual and abstract class used for the listener patern.
+    virtual void KeyPressed(char Key) = 0;
 
 };
 
