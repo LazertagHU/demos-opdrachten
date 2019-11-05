@@ -9,7 +9,7 @@ class TransferHitsControlTaak : public rtos::task<> {
 private:
     rtos::flag TransferEnableFlag;
     rtos::pool< PlayerInfo > & entity_pool;
-    enum class states { IDLE };
+    enum class states { WAIT_FOR_WRITE };
     hit hits[100];
     states state;
     unsigned int hitAmount;

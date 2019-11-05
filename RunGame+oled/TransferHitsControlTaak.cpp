@@ -8,10 +8,10 @@ void TransferHitsControlTaak::writing(){
 }
 
 void TransferHitsControlTaak::main(){
-    state = states::IDLE;
+    state = states::WAIT_FOR_WRITE;
     for(;;){
         switch( state ){
-            case states::IDLE:
+            case states::WAIT_FOR_WRITE:
                 wait( TransferEnableFlag );
             // break;
                 PlayerInfo player = entity_pool.read();
