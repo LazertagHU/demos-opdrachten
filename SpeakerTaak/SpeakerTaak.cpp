@@ -55,15 +55,8 @@ void SpeakerTaak::main(){
                     lsp.write(0);
                     lsp.flush();
                     hwlib::wait_us(half_period);
-                    if(TempFreq >= 400){
-                        TempFreq       -= 4;
-                        half_period     = (1'000'000 / (2 * TempFreq));
-                    }
-                    else if(TempFreq < 400 && TempFreq >=50){
-                        TempFreq       -= 2;
-                        half_period     = (1'0000'000 / (2 * TempFreq));
-                    }
-                        
+                    TempFreq       -= 4;
+                    half_period     = (1'000'000 / (2 * TempFreq));   
                 }
                 SpeakerState            = SpeakerState_t::WAIT_FOR_INPUT;
                 break;
