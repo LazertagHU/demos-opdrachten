@@ -93,10 +93,10 @@
     </Configuration>
   </Settings>
   <VirtualDirectory Name="src">
-    <File Name="Makefile"/>
     <File Name="main.cpp"/>
     <File Name="DisplayTaak.cpp"/>
     <File Name="DisplayTaak.hpp"/>
     <File Name="TESTTaak.hpp"/>
+    <File Name="Makefile"/>
   </VirtualDirectory>
 </CodeLite_Project>

@@ -59,42 +59,42 @@ void DisplayTaak::main(){
             // break;
                 if(Message.Type == 'M'){
                    
-                    hwlib::wait_ms(10); Wmessage.clear();
-                    hwlib::wait_ms(10); MessageDisplay  << "\t0000"; 
-                    hwlib::wait_ms(10);MessageDisplay <<  Message.StringToWrite;
-                    hwlib::wait_ms(10); MessageDisplay << hwlib::flush;
+                    hwlib::wait_us(10); Wmessage.clear();
+                    hwlib::wait_us(10); MessageDisplay  << "\t0000"; 
+                    hwlib::wait_us(10);MessageDisplay <<  Message.StringToWrite;
+                    hwlib::wait_us(10); MessageDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'N'){
-                    hwlib::wait_ms(10); Wname.clear();
-                    hwlib::wait_ms(10); NameDisplay << "\t0000";
-                    hwlib::wait_ms(10); NameDisplay << "#";
-                    hwlib::wait_ms(10); NameDisplay << Message.IntToWrite;
-                    hwlib::wait_ms(10); NameDisplay <<hwlib::flush;
+                    hwlib::wait_us(10); Wname.clear();
+                    hwlib::wait_us(10); NameDisplay << "\t0000";
+                    hwlib::wait_us(10); NameDisplay << "#";
+                    hwlib::wait_us(10); NameDisplay << Message.IntToWrite;
+                    hwlib::wait_us(10); NameDisplay <<hwlib::flush;
                 }
                 else if(Message.Type == 'A'){
-                    hwlib::wait_ms(10); Wammo.clear();
-                    hwlib::wait_ms(10); AmmoDisplay << "\t0000";
-                    hwlib::wait_ms(10); AmmoDisplay << Message.IntToWrite;
-                    hwlib::wait_ms(10); AmmoDisplay << hwlib::flush;
+                    hwlib::wait_us(10); Wammo.clear();
+                    hwlib::wait_us(10); AmmoDisplay << "\t0000";
+                    hwlib::wait_us(10); AmmoDisplay << Message.IntToWrite;
+                    hwlib::wait_us(10); AmmoDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'H'){
-                    hwlib::wait_ms(10); Whealth.clear();
-                    hwlib::wait_ms(10); HealthDisplay   << "\t0000";
-                    hwlib::wait_ms(10); HealthDisplay << "HP: ";
-                    hwlib::wait_ms(10); HealthDisplay << Message.IntToWrite;
-                    hwlib::wait_ms(10); HealthDisplay << hwlib::flush;
+                    hwlib::wait_us(10); Whealth.clear();
+                    hwlib::wait_us(10); HealthDisplay   << "\t0000";
+                    hwlib::wait_us(10); HealthDisplay << "HP: ";
+                    hwlib::wait_us(10); HealthDisplay << Message.IntToWrite;
+                    hwlib::wait_us(10); HealthDisplay << hwlib::flush;
                 }
                 else if(Message.Type == 'T'){
-                    hwlib::wait_ms(10); Wtime.clear();
-                    hwlib::wait_ms(10); TimeDisplay     << "\t0000";
-                    hwlib::wait_ms(10); TimeDisplay << Message.IntToWrite;
-                    hwlib::wait_ms(10); TimeDisplay <<  hwlib::flush;
+                    hwlib::wait_us(10); Wtime.clear();
+                    hwlib::wait_us(10); TimeDisplay     << "\t0000";
+                    hwlib::wait_us(10); TimeDisplay << Message.IntToWrite;
+                    hwlib::wait_us(10); TimeDisplay <<  hwlib::flush;
                 }
                 else if(Message.Type == 'G'){
-                    hwlib::wait_ms(10); WweaponT.clear();
-                    hwlib::wait_ms(10); WeaponTDisplay << "\t0000"; 
-                    hwlib::wait_ms(10); WeaponTDisplay << Message.StringToWrite; 
-                    hwlib::wait_ms(10); WeaponTDisplay << hwlib::flush;
+                    hwlib::wait_us(10); WweaponT.clear();
+                    hwlib::wait_us(10); WeaponTDisplay << "\t0000"; 
+                    hwlib::wait_us(10); WeaponTDisplay << Message.StringToWrite; 
+                    hwlib::wait_us(10); WeaponTDisplay << hwlib::flush;
                 }
                 break;
             }   
