@@ -21,6 +21,10 @@ private:
     void main() override;
       
 public:
+    /// \brief
+    /// The default constructor of TransferHitsControll
+    /// \details
+    /// Names its task and inits its flag and pool
     TransferHitsControlTaak( rtos::pool< PlayerInfo > & entity_pool ):
         task( 8, "TransferHitsControlTaak" ),
         TransferEnableFlag( this, "TransferEnableFlag" ),
