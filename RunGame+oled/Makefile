@@ -9,7 +9,7 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES +=  ButtonTaak.cpp InputControlTaak.cpp KeypadTaak.cpp PlayerInfo.cpp runGameTaak.cpp SendTask.cpp TransferHitsControlTaak.cpp pause_detector.cpp DisplayTaak.cpp
+SOURCES +=  ButtonTaak.cpp InputControlTaak.cpp KeypadTaak.cpp PlayerInfo.cpp runGameTaak.cpp SendTask.cpp TransferHitsControlTaak.cpp pause_detector.cpp DisplayTaak.cpp msg_decoder.cpp
 
 # header files in this project
 

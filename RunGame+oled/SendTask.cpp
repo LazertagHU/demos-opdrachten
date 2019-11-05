@@ -19,7 +19,6 @@ void SendTask::main(){
                 wait( SendFlag );
                 i = 31;
                 message = sendpool.read();
-                hwlib::cout << message << "\n";
                 bit = (message >> i) & 1;
                 // laser.write(1);
                 if( bit == 1 ){

@@ -70,7 +70,7 @@ void DisplayTaak::main(){
                     hwlib::wait_us(10); NameDisplay << "\t0000";
                     hwlib::wait_us(10); NameDisplay << "#";
                     hwlib::wait_us(10); NameDisplay << Message.IntToWrite;
-                    hwlib::wait_us(10); //NameDisplay;// <<hwlib::flush;
+                    hwlib::wait_us(10); NameDisplay << hwlib::flush;
                     NameDisplay.flush();
                 }
                 else if(Message.Type == 'A'){

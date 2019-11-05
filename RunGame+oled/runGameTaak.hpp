@@ -80,7 +80,7 @@ private:
     /// 
     /// This function calculates the specific command that needs to be send 
     /// by the game leader at a specific countdown timer.
-    void computeStartCommand(uint32_t countdown, uint32_t &startCommand);
+    uint32_t computeStartCommand(uint32_t countdown, uint32_t command);
 
     /// \brief
     /// Returns pressed chars on keypad.

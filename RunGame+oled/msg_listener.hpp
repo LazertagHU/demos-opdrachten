@@ -1,6 +1,8 @@
 #ifndef MSG_LISTENER_HPP
 #define MSG_LISTENER_HPP
 
+#include "hwlib.hpp"
+
 class msg_listener {
 public:
     /// \brief
